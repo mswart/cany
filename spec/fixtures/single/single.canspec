@@ -1,0 +1,3 @@
+Cany::Specification.new do
+  name 'single-test'
+end
