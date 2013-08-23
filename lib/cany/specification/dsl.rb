@@ -19,7 +19,7 @@ module Cany
         end
       end
 
-      delegate :name
+      delegate :name, :description, :maintainer_name, :maintainer_email, :website
     end
   end
 end

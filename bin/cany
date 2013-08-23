@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+# -*- coding: utf-8 -*-
+require 'bundler/setup'
+
+require 'cany/dpkg/creator'
+tasks = { 'create' => Cany::Dpkg::Creator }
+
+unless tasks.include? ARGV.first
+  puts 'Unknown subaction - choose from ' + tasks.keys.join(', ')
+  exit 1
+end
+
+tasks[ARGV.first].new.start

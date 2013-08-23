@@ -1,5 +1,7 @@
 require 'cany/version'
 require 'cany/specification'
+require 'cany/dpkg'
+require 'cany/dpkg/creator'
 
 module Cany
   class MissingSpecification < Exception
