@@ -4,5 +4,5 @@ source 'https://rubygems.org'
 gemspec
 
 group :test do
-   gemspec path: '../deb_control'
+   gem 'deb_control', '~> 0.0.1'
 end
