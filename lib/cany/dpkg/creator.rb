@@ -15,6 +15,7 @@ module Cany
         create_compact
         create_source_format
         create_source_control
+        create_copyright
       end
 
       def create_source_format
@@ -45,6 +46,17 @@ module Cany
           f.write("Architecture: any\n")
           f.write("Depends: ${shlibs:Depends}, ${misc:Depends}, ruby\n")
           f.write("Description: #{spec.description}\n")
+        end
+      end
+
+      def create_copyright
+        File.open debian('copyright'), 'w' do |f|
+          f.write("Format: http://dep.debian.net/deps/dep5\n")
+          f.write("Upstream-Name: #{spec.name}\n\n")
+
+          f.write("Files: *\n")
+          f.write("Copyright: #{Time.now.year} #{spec.maintainer_name}\n")
+          f.write("Licence: #{spec.licence}\n  [LICENCE TEXT]\n")
         end
       end
     end

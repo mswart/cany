@@ -12,6 +12,7 @@ describe Cany::Dpkg::Creator do
         maintainer_name 'Hans Otto'
         maintainer_email 'hans.otto@example.org'
         website 'http://example.org'
+        licence 'GPL-2+'
       end
       s.base_dir = dir
       s
@@ -72,6 +73,27 @@ describe Cany::Dpkg::Creator do
           'Architecture' => 'any',
           'Depends'     => '${shlibs:Depends}, ${misc:Depends}, ruby',
           'Description' => 'Test Project'
+        })
+      end
+    end
+
+    context 'copyright file' do
+      let(:filename) { File.join dir, 'debian', 'copyright' }
+      subject { DebControl::ControlFileBase.read filename }
+
+      it do
+        run
+        expect(subject.paragraphs.size).to eq 2
+
+        expect(subject.paragraphs.first).to eq({
+          'Format' => 'http://dep.debian.net/deps/dep5',
+          'Upstream-Name' => 'dpkg-creator-test',
+        })
+
+        expect(subject.paragraphs[1]).to eq({
+          'Files' => '*',
+          'Copyright' => "#{Time.now.year} Hans Otto",
+          'Licence' => "GPL-2+\n[LICENCE TEXT]"
         })
       end
     end

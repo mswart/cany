@@ -36,5 +36,12 @@ describe Cany::Specification do
       end
       expect(spec.website).to eq 'http://example.org/~hans.otto/'
     end
+
+    it 'should have a licence' do
+      spec = Cany::Specification.new do
+        licence 'MIT'
+      end
+      expect(spec.licence).to eq 'MIT'
+    end
   end
 end
