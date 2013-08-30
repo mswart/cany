@@ -6,7 +6,9 @@ TODO: Write a gem description
 
 Add this line to your application's Gemfile:
 
-    gem 'cany'
+```ruby
+gem 'cany'
+```
 
 And then execute:
 
