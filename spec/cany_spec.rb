@@ -15,5 +15,6 @@ describe Cany do
     spec = Cany::setup File.expand_path('../fixtures/single', __FILE__)
     expect(spec).to be_an_instance_of Cany::Specification
     expect(spec.name).to eq 'single-test'
+    expect(spec.base_dir).to eq File.expand_path('../fixtures/single', __FILE__)
   end
 end

@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 require 'bundler/setup'
 
+require 'cany'
 require 'cany/dpkg/creator'
 tasks = { 'create' => Cany::Dpkg::Creator }
 
@@ -10,4 +11,4 @@ unless tasks.include? ARGV.first
   exit 1
 end
 
-tasks[ARGV.first].new.start
+tasks[ARGV.first].new(Cany::setup '.').run

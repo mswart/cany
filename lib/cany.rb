@@ -15,6 +15,8 @@ module Cany
     raise MissingSpecification, "No #{Specification::EXT} found in #{directory}" if specs.size == 0
     raise MultipleSpecifications, "Multiple #{Specification::EXT} found in #{directory}" if specs.size > 1
     file = specs.first
-    eval File::read(file), binding, file
+    spec = eval File::read(file), binding, file
+    spec.base_dir = directory
+    spec
   end
 end
