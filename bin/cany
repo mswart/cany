@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
-require 'bundler/setup'
+#require 'bundler/setup'
 
 require 'cany'
 require 'cany/dpkg/creator'
