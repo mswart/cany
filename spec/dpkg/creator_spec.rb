@@ -110,6 +110,7 @@ describe Cany::Dpkg::Creator do
 
         expect(subject).to start_with '#!/usr/bin/make -f'
         expect(subject).to include "%:\n\truby -S cany dpkg-builder $@"
+        expect(subject).to include "override_dh_prep:"
       end
     end
 

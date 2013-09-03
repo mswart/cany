@@ -68,6 +68,7 @@ module Cany
           # call cany for every target:
           f.write("%:\n")
           f.write("\truby -S cany dpkg-builder $@\n")
+          f.write("\noverride_dh_prep:\n")
 
           f.chmod(0755)
         end
