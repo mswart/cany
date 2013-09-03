@@ -8,6 +8,7 @@ describe Cany::Dpkg::Creator do
     let(:spec) do
       s = Cany::Specification.new do
         name 'dpkg-creator-test'
+        version '0.1'
         description 'Test Project'
         maintainer_name 'Hans Otto'
         maintainer_email 'hans.otto@example.org'
@@ -106,7 +107,23 @@ describe Cany::Dpkg::Creator do
         run
         expect(subject).to start_with '#!/usr/bin/make -f'
 
-        expect(subject).to include "%:\n\tcany dpkg-build-step $@"
+        expect(subject).to include "%:\n\truby -Scany dpkg-build-step $@"
+      end
+    end
+
+    context 'changelog file' do
+      let(:filename) { File.join dir, 'debian', 'changelog' }
+      subject { File.read filename }
+
+      it do
+        Timecop.freeze(Time.new(2013, 8, 14, 1, 18, 51, 2)) do
+          run
+        end
+        expect(subject).to eq 'dpkg-creator-test (0.1-1) unstable; urgency=low
+
+* Build with cany
+
+-- Hans Otto <hans.otto@example.org>  Wed, 14 Aug 2013 01:18:51 +0000'
       end
     end
   end

@@ -43,5 +43,12 @@ describe Cany::Specification do
       end
       expect(spec.licence).to eq 'MIT'
     end
+
+    it 'should have a version' do
+      spec = Cany::Specification.new do
+        version '0.1'
+      end
+      expect(spec.version).to eq '0.1'
+    end
   end
 end

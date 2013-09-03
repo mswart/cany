@@ -4,5 +4,6 @@ source 'https://rubygems.org'
 gemspec
 
 group :test do
-   gem 'deb_control', '~> 0.0.1'
+  gem 'deb_control', '~> 0.0.1'
+  gem 'timecop'
 end

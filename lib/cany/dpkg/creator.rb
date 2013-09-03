@@ -17,6 +17,7 @@ module Cany
         create_source_control
         create_copyright
         create_rules
+        create_changelog
       end
 
       def create_source_format
@@ -67,6 +68,16 @@ module Cany
           # call cany for every target:
           f.write("%:\n")
           f.write("\truby -Scany dpkg-build-step $@\n")
+        end
+      end
+
+      def create_changelog
+        File.open debian('changelog'), 'w' do |f|
+          f.write "#{spec.name} (#{spec.version}-1) unstable; urgency=low\n"
+          f.write "\n"
+          f.write "* Build with cany\n"
+          f.write "\n"
+          f.write "-- #{spec.maintainer_name} <#{spec.maintainer_email}>  #{Time.now.strftime "%a, %d %b %Y %H:%M:%S %z" }"
         end
       end
     end
