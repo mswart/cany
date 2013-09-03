@@ -33,8 +33,8 @@ describe Cany::Dpkg::Builder do
         use :rails
       end
       expect(Cany::Dpkg::DebHelperRecipe).to receive(:new).ordered.with(spec, nil).and_call_original
-      expect(Cany::Recipes::Bundler).to receive(:new).ordered.with(spec, kind_of(Cany::Dpkg::DebHelperRecipe)).and_call_original
-      expect(Cany::Recipes::Rails).to receive(:new).ordered.with(spec, kind_of(Cany::Recipes::Bundler)).and_call_original
+      expect(Cany::Recipes::Rails).to receive(:new).ordered.with(spec, kind_of(Cany::Dpkg::DebHelperRecipe)).and_call_original
+      expect(Cany::Recipes::Bundler).to receive(:new).ordered.with(spec, kind_of(Cany::Recipes::Rails)).and_call_original
       builder.setup_recipes
     end
   end

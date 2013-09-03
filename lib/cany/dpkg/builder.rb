@@ -28,7 +28,7 @@ module Cany
       def setup_recipes
         @recipes = []
         @recipes << DebHelperRecipe.new(spec, nil)
-        spec.recipes.each do |name|
+        spec.recipes.reverse.each do |name|
           @recipes.unshift Recipe.from_name(name).new(spec, @recipes.first)
         end
       end
