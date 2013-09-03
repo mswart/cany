@@ -97,5 +97,17 @@ describe Cany::Dpkg::Creator do
         })
       end
     end
+
+    context 'rules file' do
+      let(:filename) { File.join dir, 'debian', 'rules' }
+      subject { File.read filename }
+
+      it do
+        run
+        expect(subject).to start_with '#!/usr/bin/make -f'
+
+        expect(subject).to include "%:\n\tcany dpkg-build-step $@"
+      end
+    end
   end
 end

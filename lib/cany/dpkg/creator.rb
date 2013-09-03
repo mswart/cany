@@ -16,6 +16,7 @@ module Cany
         create_source_format
         create_source_control
         create_copyright
+        create_rules
       end
 
       def create_source_format
@@ -57,6 +58,15 @@ module Cany
           f.write("Files: *\n")
           f.write("Copyright: #{Time.now.year} #{spec.maintainer_name}\n")
           f.write("Licence: #{spec.licence}\n  [LICENCE TEXT]\n")
+        end
+      end
+
+      def create_rules
+        File.open debian('rules'), 'w' do |f|
+          f.write("#!/usr/bin/make -f\n")
+          # call cany for every target:
+          f.write("%:\n")
+          f.write("\truby -Scany dpkg-build-step $@\n")
         end
       end
     end
