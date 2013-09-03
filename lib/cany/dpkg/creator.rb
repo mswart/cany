@@ -75,9 +75,9 @@ module Cany
         File.open debian('changelog'), 'w' do |f|
           f.write "#{spec.name} (#{spec.version}-1) unstable; urgency=low\n"
           f.write "\n"
-          f.write "* Build with cany\n"
+          f.write "  * Build with cany\n"
           f.write "\n"
-          f.write "-- #{spec.maintainer_name} <#{spec.maintainer_email}>  #{Time.now.strftime "%a, %d %b %Y %H:%M:%S %z" }"
+          f.write " -- #{spec.maintainer_name} <#{spec.maintainer_email}>  #{Time.now.strftime "%a, %d %b %Y %H:%M:%S %z" }"
         end
       end
     end

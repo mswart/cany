@@ -121,9 +121,9 @@ describe Cany::Dpkg::Creator do
         end
         expect(subject).to eq 'dpkg-creator-test (0.1-1) unstable; urgency=low
 
-* Build with cany
+  * Build with cany
 
--- Hans Otto <hans.otto@example.org>  Wed, 14 Aug 2013 01:18:51 +0000'
+ -- Hans Otto <hans.otto@example.org>  Wed, 14 Aug 2013 01:18:51 +0000'
       end
     end
   end
