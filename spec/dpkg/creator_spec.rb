@@ -107,7 +107,7 @@ describe Cany::Dpkg::Creator do
         run
         expect(subject).to start_with '#!/usr/bin/make -f'
 
-        expect(subject).to include "%:\n\truby -Scany dpkg-build-step $@"
+        expect(subject).to include "%:\n\truby -S cany dpkg-build-step $@"
       end
     end
 

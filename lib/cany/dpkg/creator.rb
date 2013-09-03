@@ -67,7 +67,7 @@ module Cany
           f.write("#!/usr/bin/make -f\n")
           # call cany for every target:
           f.write("%:\n")
-          f.write("\truby -Scany dpkg-build-step $@\n")
+          f.write("\truby -S cany dpkg-build-step $@\n")
         end
       end
 
