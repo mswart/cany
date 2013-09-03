@@ -4,11 +4,16 @@
 
 require 'cany'
 require 'cany/dpkg/creator'
-tasks = { 'create' => Cany::Dpkg::Creator }
+require 'cany/dpkg/builder'
+
+tasks = {
+  'dpkg-create' => Cany::Dpkg::Creator,
+  'dpkg-builder' => Cany::Dpkg::Builder
+}
 
 unless tasks.include? ARGV.first
   puts 'Unknown subaction - choose from ' + tasks.keys.join(', ')
   exit 1
 end
 
-tasks[ARGV.first].new(Cany::setup '.').run
+tasks[ARGV.shift].new(Cany::setup '.').run *ARGV

@@ -26,4 +26,9 @@ RSpec.configure do |config|
     # Only allow expect syntax
     c.syntax = :expect
   end
+
+  config.before(:each) do
+    @executed_programs = []
+    allow_any_instance_of(Cany::Recipe).to receive(:exec) { |*args| @executed_programs << args }
+  end
 end

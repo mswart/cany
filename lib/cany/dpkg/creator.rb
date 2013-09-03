@@ -10,7 +10,7 @@ module Cany
         File.join spec.base_dir, 'debian', *args
       end
 
-      def run
+      def run(*args)
         Dir.mkdir debian
         create_compact
         create_source_format
@@ -67,7 +67,7 @@ module Cany
           f.write("#!/usr/bin/make -f\n")
           # call cany for every target:
           f.write("%:\n")
-          f.write("\truby -S cany dpkg-build-step $@\n")
+          f.write("\truby -S cany dpkg-builder $@\n")
 
           f.chmod(0755)
         end

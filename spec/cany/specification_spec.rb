@@ -50,5 +50,12 @@ describe Cany::Specification do
       end
       expect(spec.version).to eq '0.1'
     end
+
+    it 'should be able to include recipes' do
+      spec = Cany::Specification.new do
+        use :bundler
+      end
+      expect(spec.recipes).to eq [:bundler]
+    end
   end
 end

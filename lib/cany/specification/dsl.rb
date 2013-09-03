@@ -20,6 +20,12 @@ module Cany
       end
 
       delegate :name, :description, :maintainer_name, :maintainer_email, :website, :licence, :version
+
+      # This include the given recipe into the build process.
+      # @param [Symbol] name The name of the recipe as symbol.
+      def use(name)
+        @specification.recipes << name
+      end
     end
   end
 end
