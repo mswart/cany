@@ -64,7 +64,7 @@ describe Cany::Dpkg::Creator do
           'Section'          => 'ruby',
           'Priority'         => 'optional',
           'Maintainer'       => 'Hans Otto <hans.otto@example.org>',
-          'Standard-Version' => '3.9.2',
+          'Standards-Version' => '3.9.2',
           'Build-Depends'    => 'debhelper (>= 7.0.50~), ruby',
           'Homepage'         => 'http://example.org'
         })

@@ -38,7 +38,7 @@ module Cany
           f.write("Section: ruby\n")
           f.write("Priority: optional\n")
           f.write("Maintainer: #{spec.maintainer_name} <#{spec.maintainer_email}>\n")
-          f.write("Standard-Version: 3.9.2\n")
+          f.write("Standards-Version: 3.9.2\n")
           f.write("Homepage: #{spec.website}\n")
           f.write("Build-Depends: debhelper (>= 7.0.50~), ruby\n")
 
