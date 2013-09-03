@@ -3,6 +3,11 @@ module Cany
     class DebHelperRecipe < Cany::Recipe
       register_as :deb_helper
 
+      def initialize(*args)
+        super *args
+        @log = File.read('debian/xikolo-account.debhelper.log') if File.exists?  'debian/xikolo-account.debhelper.log'
+      end
+
       def clean
         exec %w(dh clean)
       end
@@ -12,6 +17,7 @@ module Cany
       end
 
       def binary
+        File.write('debian/xikolo-account.debhelper.log', @log)
         exec %w(dh binary)
       end
     end
