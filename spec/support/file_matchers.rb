@@ -15,3 +15,9 @@ RSpec::Matchers.define :have_the_content do |expected|
     File.read(actual.to_s) == expected
   end
 end
+
+RSpec::Matchers.define :be_executable do
+  match do |actual|
+    File.executable? actual.to_s
+  end
+end
