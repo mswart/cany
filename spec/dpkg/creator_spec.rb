@@ -18,7 +18,7 @@ describe Cany::Dpkg::Creator do
       s.base_dir = dir
       s
     end
-    let(:run) { Cany::Dpkg::Creator.new(spec).run }
+    let(:run) { Cany::Dpkg::Creator.new(spec).run *(@run_args || []) }
 
     context 'debian directory' do
       subject { File.join dir, 'debian' }
@@ -65,7 +65,7 @@ describe Cany::Dpkg::Creator do
           'Priority'         => 'optional',
           'Maintainer'       => 'Hans Otto <hans.otto@example.org>',
           'Standards-Version' => '3.9.2',
-          'Build-Depends'    => 'debhelper (>= 7.0.50~), ruby',
+          'Build-Depends'    => 'debhelper (>= 7.0.50~), ruby, ruby-dev',
           'Homepage'         => 'http://example.org'
         })
 
@@ -75,6 +75,56 @@ describe Cany::Dpkg::Creator do
           'Depends'     => '${shlibs:Depends}, ${misc:Depends}, ruby',
           'Description' => 'Test Project'
         })
+      end
+
+      it 'use the specified ruby packages' do
+        @run_args = %w(--ruby-deb ruby2.0)
+        run
+        expect(subject.paragraphs.size).to eq 2
+        source = subject.paragraphs.first
+        binary = subject.paragraphs[1]
+
+        expect(source).to eq({
+                                 'Source'           => 'dpkg-creator-test',
+                                 'Section'          => 'ruby',
+                                 'Priority'         => 'optional',
+                                 'Maintainer'       => 'Hans Otto <hans.otto@example.org>',
+                                 'Standards-Version' => '3.9.2',
+                                 'Build-Depends'    => 'debhelper (>= 7.0.50~), ruby2.0, ruby2.0-dev',
+                                 'Homepage'         => 'http://example.org'
+                             })
+
+        expect(binary).to eq({
+                                 'Package'     => 'dpkg-creator-test',
+                                 'Architecture' => 'any',
+                                 'Depends'     => '${shlibs:Depends}, ${misc:Depends}, ruby2.0',
+                                 'Description' => 'Test Project'
+                             })
+      end
+
+      it 'use the specified ruby' do
+        @run_args = %w(--ruby ruby2.0)
+        run
+        expect(subject.paragraphs.size).to eq 2
+        source = subject.paragraphs.first
+        binary = subject.paragraphs[1]
+
+        expect(source).to eq({
+                                 'Source'           => 'dpkg-creator-test',
+                                 'Section'          => 'ruby',
+                                 'Priority'         => 'optional',
+                                 'Maintainer'       => 'Hans Otto <hans.otto@example.org>',
+                                 'Standards-Version' => '3.9.2',
+                                 'Build-Depends'    => 'debhelper (>= 7.0.50~), ruby2.0, ruby2.0-dev',
+                                 'Homepage'         => 'http://example.org'
+                             })
+
+        expect(binary).to eq({
+                                 'Package'     => 'dpkg-creator-test',
+                                 'Architecture' => 'any',
+                                 'Depends'     => '${shlibs:Depends}, ${misc:Depends}, ruby2.0',
+                                 'Description' => 'Test Project'
+                             })
       end
     end
 
@@ -109,8 +159,43 @@ describe Cany::Dpkg::Creator do
         expect(filename).to be_executable
 
         expect(subject).to start_with '#!/usr/bin/make -f'
-        expect(subject).to include "%:\n\truby -S cany dpkg-builder $@"
+        expect(subject).to include "export PATH := debian/bin:${PATH}\n"
+        expect(subject).to include "export GEM_PATH := debian/gems:${GEM_PATH}\n"
+        expect(subject).to include "\truby -S cany dpkg-builder $@"
+        expect(subject).to include "\truby -cS cany >/dev/null || ruby -S gem install --no-ri --no-rdoc --install-dir debian/gems --bindir debian/bin cany"
         expect(subject).to include "override_dh_prep:"
+      end
+
+      it 'should be able to install cany from file' do
+        @run_args = %w(--gem-from /tmp/cany2.gem)
+        run
+
+        expect(filename).to be_executable
+
+        expect(subject).to start_with '#!/usr/bin/make -f'
+        expect(subject).to include "\ttest ! -e /tmp/cany2.gem || ruby -S gem install --no-ri --no-rdoc --install-dir debian/gems --bindir debian/bin /tmp/cany2.gem"
+      end
+
+      it 'should use the selected interpreter' do
+        @run_args = '--ruby-exe', 'ruby1.9.1'
+        run
+
+        expect(filename).to be_executable
+
+        expect(subject).to start_with '#!/usr/bin/make -f'
+        expect(subject).to include "\truby1.9.1 -S cany dpkg-builder $@"
+        expect(subject).to include "\truby1.9.1 -cS cany >/dev/null || ruby1.9.1 -S gem install --no-ri --no-rdoc --install-dir debian/gems --bindir debian/bin cany"
+      end
+
+      it 'should use the current ruby' do
+        @run_args = '--ruby', 'ruby1.9.1'
+        run
+
+        expect(filename).to be_executable
+
+        expect(subject).to start_with '#!/usr/bin/make -f'
+        expect(subject).to include "\truby1.9.1 -S cany dpkg-builder $@"
+        expect(subject).to include "\truby1.9.1 -cS cany >/dev/null || ruby1.9.1 -S gem install --no-ri --no-rdoc --install-dir debian/gems --bindir debian/bin cany"
       end
     end
 
