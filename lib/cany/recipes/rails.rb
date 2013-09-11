@@ -18,7 +18,11 @@ module Cany
           install item, "/usr/share/#{spec.name}" if File.exists? item
         end
 
-        install 'config', "/etc/#{spec.name}"
+        Dir.foreach('config') do |entry|
+          next if %w(. ..).include? entry
+          install File.join('config', entry), "/etc/#{spec.name}"
+        end
+        install_link "/etc/#{spec.name}", "/usr/share/#{spec.name}/config"
 
         install_dir "/etc/#{spec.name}"
         install_dir "/var/tmp/#{spec.name}"
