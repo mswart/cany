@@ -44,6 +44,27 @@ Cany::Specification.new do
 end
 ```
 
+
+## Recipes
+
+Cany uses different recipes to share different packaging tasks above multiple applications.
+
+### Bundler
+
+All common applications need a bunch of gems. Bundle is the common tool to manage these gems. Because for most of the gems there exists no packages, we decide that the best approach is to ship the installed gems with the application.
+
+This recipe is designed to use as first one. The installs bundler and uses the ``Gemfile.lock`` to install the referenced gems to ``vendor/bundle``.
+
+### Rails
+
+This recipe is used to install a ruby on rails application. The recipes installs the different files/directories.
+
+### Thin
+
+This recipe configures thin and install an init script to launch the application. It assumes that thin is listed in your Gemfile.
+
+
+
 ## Use Your Specification to Create Packages
 
 To create dpkg packages (used by debian and its derivatives) run from your application directory with your canspec:
