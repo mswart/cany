@@ -71,6 +71,18 @@ module Cany
     end
 
     # @api public
+    # Install a file. The content is passed as argument. This method is designed to be used by
+    # recipes to create files dynamically.
+    # @param [String] filename The absolute file name for the file inside the package.
+    # @param [String] content The file content
+    def install_content(filename, content)
+      FileUtils.mkdir_p File.dirname File.join('debian', spec.name, filename)
+      File.open File.join('debian', spec.name, filename), 'w' do |f|
+        f.write content
+      end
+    end
+
+    # @api public
     # Installs/creates an empty directory
     # @param [String] path The path name
     def install_dir(path)
