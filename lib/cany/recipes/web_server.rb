@@ -3,7 +3,7 @@ module Cany
     class WebServer < Recipe
       def binary
         File.open File.join('debian', "#{spec.name}.upstart"), 'w' do |f|
-          f.write "description  \"#{spec.description}\""
+          f.write "description  \"#{spec.description}\"\n"
 
           f.write "start on filesystem or runlevel [2345]\n"
           f.write "stop on runlevel [!2345]\n"
