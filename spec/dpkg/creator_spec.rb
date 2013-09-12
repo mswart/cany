@@ -162,18 +162,8 @@ describe Cany::Dpkg::Creator do
         expect(subject).to include "export PATH := debian/bin:${PATH}\n"
         expect(subject).to include "export GEM_PATH := debian/gems:${GEM_PATH}\n"
         expect(subject).to include "\truby -S cany dpkg-builder $@"
-        expect(subject).to include "\truby -cS cany >/dev/null || ruby -S gem install --no-ri --no-rdoc --install-dir debian/gems --bindir debian/bin cany"
+        expect(subject).to include "\truby -cS cany >/dev/null || ruby -S gem install --no-ri --no-rdoc --install-dir debian/gems --bindir debian/bin $${CANY_GEM:-cany}"
         expect(subject).to include "override_dh_prep:"
-      end
-
-      it 'should be able to install cany from file' do
-        @run_args = %w(--gem-from /tmp/cany2.gem)
-        run
-
-        expect(filename).to be_executable
-
-        expect(subject).to start_with '#!/usr/bin/make -f'
-        expect(subject).to include "\ttest ! -e /tmp/cany2.gem || ruby -S gem install --no-ri --no-rdoc --install-dir debian/gems --bindir debian/bin /tmp/cany2.gem"
       end
 
       it 'should use the selected interpreter' do
@@ -184,7 +174,7 @@ describe Cany::Dpkg::Creator do
 
         expect(subject).to start_with '#!/usr/bin/make -f'
         expect(subject).to include "\truby1.9.1 -S cany dpkg-builder $@"
-        expect(subject).to include "\truby1.9.1 -cS cany >/dev/null || ruby1.9.1 -S gem install --no-ri --no-rdoc --install-dir debian/gems --bindir debian/bin cany"
+        expect(subject).to include "\truby1.9.1 -cS cany >/dev/null || ruby1.9.1 -S gem install --no-ri --no-rdoc --install-dir debian/gems --bindir debian/bin $${CANY_GEM:-cany}"
       end
 
       it 'should use the current ruby' do
@@ -195,7 +185,7 @@ describe Cany::Dpkg::Creator do
 
         expect(subject).to start_with '#!/usr/bin/make -f'
         expect(subject).to include "\truby1.9.1 -S cany dpkg-builder $@"
-        expect(subject).to include "\truby1.9.1 -cS cany >/dev/null || ruby1.9.1 -S gem install --no-ri --no-rdoc --install-dir debian/gems --bindir debian/bin cany"
+        expect(subject).to include "\truby1.9.1 -cS cany >/dev/null || ruby1.9.1 -S gem install --no-ri --no-rdoc --install-dir debian/gems --bindir debian/bin $${CANY_GEM:-cany}"
       end
     end
 

@@ -38,10 +38,6 @@ module Cany
             @options[:ruby_deb] = name
           end
 
-          opts.on('--gem-from PATH_TO_GEM', 'Install cany from file') do |path|
-            @options[:gem_from] = path
-          end
-
           opts.on('-h', '--help', 'Display this screen') do
             puts opts
             exit
@@ -110,9 +106,7 @@ module Cany
           f.write("export GEM_PATH := debian/gems:${GEM_PATH}\n")
           # call cany for every target:
           f.write("%:\n")
-          gem_install = "#{ruby_exe} -S gem install --no-ri --no-rdoc --install-dir debian/gems --bindir debian/bin"
-          f.write("\ttest ! -e #{@options[:gem_from]} || #{gem_install} #{@options[:gem_from]}\n") if @options.has_key? :gem_from
-          f.write("\t#{ruby_exe} -cS cany >/dev/null || #{gem_install} cany\n")
+          f.write("\t#{ruby_exe} -cS cany >/dev/null || #{ruby_exe} -S gem install --no-ri --no-rdoc --install-dir debian/gems --bindir debian/bin $${CANY_GEM:-cany}\n")
           f.write("\t#{ruby_exe} -S cany dpkg-builder $@\n")
           f.write("\noverride_dh_prep:\n")
 
