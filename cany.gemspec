@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = %w(mswart@devtation.de)
   spec.description   = %q{Canning your ruby applications}
   spec.summary       = %q{Canning your ruby applications}
-  spec.homepage      = ''
+  spec.homepage      = 'https://github.com/mswart/cany'
   spec.license       = 'MIT'
 
   spec.files         = `git ls-files`.split($/)
