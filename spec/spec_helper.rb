@@ -1,4 +1,7 @@
-require 'bundler/setup'
+require 'coveralls'
+Coveralls.wear! do
+  add_filter 'spec'
+end
 
 require 'cany'
 require 'deb_control'
