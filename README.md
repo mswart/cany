@@ -1,5 +1,10 @@
 # Cany
 
+[![Gem Version](https://badge.fury.io/rb/cany.png)](http://badge.fury.io/rb/cany)
+[![Build Status](https://travis-ci.org/mswart/cany.png?branch=master)](https://travis-ci.org/mswart/cany)
+[![Coverage Status](https://coveralls.io/repos/mswart/cany/badge.png?branch=master)](https://coveralls.io/r/mswart/cany)
+[![Code Climate](https://codeclimate.com/github/mswart/cany.png)](https://codeclimate.com/github/mswart/cany)
+
 Cany is a toolkit to create easily distribution packages from your (ruby) application. The goal is to reduce the packaging work to managing the application meta data (specification).
 
 The goal is to support all (common) package manager - all from the some specification, although at the moment is only dpkg implemented.
