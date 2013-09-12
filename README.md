@@ -4,14 +4,18 @@ Cany is a toolkit to create easily distribution packages from your (ruby) applic
 
 The goal is to support all (common) package manager - all from the some specification, although at the moment is only dpkg implemented.
 
+The difference to other packaging tools is that cany uses as much tools as possible to build packages in the recommended way.
+
+**Warning:** The gem has successfully built packages. But there are known limitations or problems. We collecting knowledge with the current usage and appreciate your feedback. With the 1.0 we will start with semantic visioning. Until then every updates tries to be as much compatible as possible but the more important goal is to create a better architecture and design -- so be careful when updating this gem.
+
 
 ## Installation
 
-Cany is a rubygem, it needs **ruby >=1.9.3** to work. But it is design to be lightweight. Therefore a:
+Cany is a rubygem, it needs **ruby >=1.9.3** to work. It is design to be lightweight, therefore a:
 
     $ gem install cany
 
-is enough to install it. But you can add is also to your application's Gemfile:
+is enough to install and use it. But you can add is also to your application's Gemfile:
 
 ```ruby
 gem 'cany'
@@ -38,28 +42,10 @@ Cany::Specification.new do
   website 'http://example.org/cany' # A website to get more information about the application
   licence 'MIT' # Your Licence
 
-  # Use common build tasks to build your application - describe how your application needs to be build
+  # Use common build tasks to build your application - describing how your application needs to be build
+  # The ordering is important, see the recipes documentation for more information about the recipes itself and there recommended ordering
   use :bundler
   use :rails
-end
-```
-
-### Recipes
-
-See the next section for documentation about the known recipes. Please be aware that the ordering of use commands is important.
-
-### Own Adjustments
-
-There are applications were the known recipes are not sufficient to build it. You can define blocks inside the canspec that are runs like normal recipes and allow you to do specific tasks.
-
-The following example installs an additional folder (of an Ruby on Rails applications):
-
-```ruby
-Cany::Sepcification.new do
-  # meta data and recipe loading
-  binary do
-    install 'additional_subdir', "/usr/share/#{spec.name}"
-  end
 end
 ```
 
@@ -80,11 +66,30 @@ This recipe is used to install a ruby on rails application. The recipes installs
 
 ### Thin
 
-This recipe configures thin and install an init script to launch the application. It assumes that thin is listed in your Gemfile.
+This recipe configures thin and install an init script to launch the application. It assumes that ``thin`` is listed in your Gemfile.
 
+
+### Own Adjustments
+
+There are applications were the known recipes are not sufficient to build it. You can define blocks inside the canspec that are runs like normal recipes and allow you to do specific tasks.
+
+The following example installs an additional folder (of an Ruby on Rails applications):
+
+```ruby
+Cany::Sepcification.new do
+  # meta data and recipe loading
+  binary do
+    install 'additional_subdir', "/usr/share/#{spec.name}"
+  end
+end
+```
+
+Take a look at the ``Recipe`` class for helper you can use.
 
 
 ## Use Your Specification to Create Packages
+
+### dpkg
 
 To create dpkg packages (used by debian and its derivatives) run from your application directory with your canspec:
 
@@ -98,6 +103,10 @@ Afterwards you should have ``*.deb`` package in the directory containing your ap
 
 
 ## Contributing
+
+If you have problems create an issue. Feedback is also welcome - you can write me on email or contact me on freenode (@mswart).
+
+If you have a change which should be included into cany:
 
 1. Fork it
 2. Create your feature branch (`git checkout -b my-new-feature`)
