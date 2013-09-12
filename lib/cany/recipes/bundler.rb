@@ -12,7 +12,6 @@ module Cany
       def build
         ENV['GEM_PATH'] = 'bundler'
         ENV['PATH'] = 'bundler/bin:' + ENV['PATH']
-        puts ENV['PATH']
         ruby_bin 'gem', %w(install bundler --no-ri --no-rdoc --install-dir bundler --bindir bundler/bin)
         ruby_bin 'bundle', %w(install --deployment --without development test)
         inner.build
