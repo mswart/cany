@@ -57,5 +57,23 @@ describe Cany::Specification do
       end
       expect(spec.recipes).to eq [:bundler]
     end
+
+    it 'should accept a block for own build steps' do
+      spec = Cany::Specification.new do
+        build do
+          install 'hans', 'otto'
+        end
+      end
+      expect(spec.build).to be_a_kind_of Proc
+    end
+
+    it 'should accept a block for own build steps' do
+      spec = Cany::Specification.new do
+        binary do
+          install 'hans', 'otto'
+        end
+      end
+      expect(spec.binary).to be_a_kind_of Proc
+    end
   end
 end

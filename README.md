@@ -44,6 +44,25 @@ Cany::Specification.new do
 end
 ```
 
+### Recipes
+
+See the next section for documentation about the known recipes. Please be aware that the ordering of use commands is important.
+
+### Own Adjustments
+
+There are applications were the known recipes are not sufficient to build it. You can define blocks inside the canspec that are runs like normal recipes and allow you to do specific tasks.
+
+The following example installs an additional folder (of an Ruby on Rails applications):
+
+```ruby
+Cany::Sepcification.new do
+  # meta data and recipe loading
+  binary do
+    install 'additional_subdir', "/usr/share/#{spec.name}"
+  end
+end
+```
+
 
 ## Recipes
 

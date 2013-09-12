@@ -26,6 +26,14 @@ module Cany
       def use(name)
         @specification.recipes << name
       end
+
+      def build(&block)
+        @specification.build = block
+      end
+
+      def binary(&block)
+        @specification.binary = block
+      end
     end
   end
 end

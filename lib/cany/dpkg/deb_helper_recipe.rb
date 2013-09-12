@@ -14,10 +14,12 @@ module Cany
       end
 
       def build
+        instance_eval &spec.build if spec.build
         exec %w(dh build)
       end
 
       def binary
+        instance_eval &spec.binary if spec.binary
         File.write('debian/xikolo-account.debhelper.log', @log)
         exec %w(dh binary)
       end
