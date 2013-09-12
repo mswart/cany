@@ -126,6 +126,19 @@ describe Cany::Dpkg::Creator do
                                  'Description' => 'Test Project'
                              })
       end
+
+      it 'should add extra deps in specific gems are used' do
+        FileUtils.copy File.expand_path('../../fixtures/testgem.lock', __FILE__), File.join(dir, 'Gemfile.lock')
+        run
+        expect(subject.paragraphs.size).to eq 2
+        source =
+        binary = subject.paragraphs[1]
+        src_deps = subject.paragraphs.first['Build-Depends'].gsub(', ', ',').split(',')
+        bin_deps = subject.paragraphs[1]['Depends'].gsub(', ', ',').split(',')
+
+        expect(src_deps).to include('libpq-dev')
+        expect(bin_deps).to include('libpq5')
+      end
     end
 
     context 'copyright file' do

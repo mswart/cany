@@ -69,6 +69,23 @@ module Cany
       end
 
       def create_source_control
+        require 'bundler'
+        lock_path = File.join(spec.base_dir, 'Gemfile.lock')
+        extra_libs = {
+            pg: ['libpq-dev', 'libpq5']
+        }
+        src_deps = ['debhelper (>= 7.0.50~)', ruby_deb, ruby_deb + '-dev']
+        bin_deps = ['${shlibs:Depends}', '${misc:Depends}', ruby_deb]
+        if File.exists? lock_path
+          lock = Bundler::LockfileParser.new File.read lock_path
+          lock.specs.each do |spec|
+            if extra_libs.has_key? spec.name.to_sym
+              src, bin = extra_libs[spec.name.to_sym]
+              src_deps << src
+              bin_deps << bin
+            end
+          end
+        end
         File.open debian('control'), 'w' do |f|
           # write source package fields:
           f.write("Source: #{spec.name}\n")
@@ -77,13 +94,13 @@ module Cany
           f.write("Maintainer: #{spec.maintainer_name} <#{spec.maintainer_email}>\n")
           f.write("Standards-Version: 3.9.2\n")
           f.write("Homepage: #{spec.website}\n")
-          f.write("Build-Depends: debhelper (>= 7.0.50~), #{ruby_deb}, #{ruby_deb}-dev\n")
+          f.write("Build-Depends: #{src_deps.join(', ')}\n")
 
           # write binary package fields:
           f.write("\n")
           f.write("Package: #{spec.name}\n")
           f.write("Architecture: any\n")
-          f.write("Depends: ${shlibs:Depends}, ${misc:Depends}, #{ruby_deb}\n")
+          f.write("Depends: #{bin_deps.join(', ')}\n")
           f.write("Description: #{spec.description}\n")
         end
       end
