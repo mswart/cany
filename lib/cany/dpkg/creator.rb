@@ -72,7 +72,8 @@ module Cany
         require 'bundler'
         lock_path = File.join(spec.base_dir, 'Gemfile.lock')
         extra_libs = {
-            pg: ['libpq-dev', 'libpq5']
+            pg: ['libpq-dev', 'libpq5'],
+            ethon: ['libcurl3 | libcurl3-gnutls | libcurl3-nss', 'libcurl3 | libcurl3-gnutls | libcurl3-nss']
         }
         src_deps = ['debhelper (>= 7.0.50~)', ruby_deb, ruby_deb + '-dev']
         bin_deps = ['${shlibs:Depends}', '${misc:Depends}', ruby_deb]

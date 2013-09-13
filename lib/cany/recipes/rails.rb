@@ -9,7 +9,9 @@ module Cany
       end
 
       def build
+        ENV['RAILS_ENV'] = 'assets'
         ruby_bin 'bundle', 'exec', 'rake', 'assets:precompile'
+        ENV['RAILS_ENV'] = 'production'
         inner.build
       end
 
