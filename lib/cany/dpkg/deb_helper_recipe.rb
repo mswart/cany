@@ -20,7 +20,7 @@ module Cany
 
       def binary
         instance_eval &spec.binary if spec.binary
-        File.write('debian/xikolo-account.debhelper.log', @log)
+        File.write("debian/#{spec.name}.debhelper.log", @log)
         exec %w(dh binary)
       end
     end
