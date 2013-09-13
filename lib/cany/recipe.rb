@@ -57,7 +57,7 @@ module Cany
     # The method expects as arguments the program name and additional parameters for the program.
     # See exec for more examples
     def ruby_bin(*args)
-      exec 'ruby', '-S', *args
+      exec RbConfig.ruby, '-S', *args
     end
 
     # @api public
