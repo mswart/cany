@@ -9,7 +9,7 @@ module Cany
       end
 
       def build
-        ruby_bin 'rake', 'assets:precompile'
+        ruby_bin 'bundle', 'exec', 'rake', 'assets:precompile'
         inner.build
       end
 
