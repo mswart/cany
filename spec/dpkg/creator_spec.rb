@@ -45,7 +45,7 @@ describe Cany::Dpkg::Creator do
       it do
         run
         expect(subject).to be_a_file
-        expect(subject).to have_the_content '8'
+        expect(subject).to have_the_content '9'
       end
     end
 
