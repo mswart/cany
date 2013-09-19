@@ -53,9 +53,13 @@ module Cany
     #   exec ['echo', 'a', 'b']
     #   exec 'echo', 'a', 'b'
     def exec(*args)
-      puts "   #{args.flatten.join(' ')}"
-      system *args.flatten
+      args.flatten!
+      puts "   #{args.join(' ')}"
+      unless system *args
+        raise Cany::CommandExecutionFailed.new args
+      end
     end
+    alias :exec_ :exec
 
     # @api public
     # Run a ruby task (like gem, bundler, rake ...)
