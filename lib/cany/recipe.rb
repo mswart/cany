@@ -26,8 +26,13 @@ module Cany
     # @param [Cany::Specification] spec Specification object
     def initialize(spec, &configure_block)
       @spec = spec
-      self.class.const_get(:DSL).new(self).exec &configure_block if configure_block
       @inner = nil
+      @hooks = Hash[(self.class.defined_hooks || []).map do |name|
+        states = {}
+        states.default = []
+        [name, states]
+      end]
+      self.class.const_get(:DSL).new(self).exec &configure_block if configure_block
     end
 
     # Specify the inner recipe for the current one.
@@ -114,6 +119,37 @@ module Cany
       end
     end
 
+    class << self
+      attr_accessor :defined_hooks
+    end
+
+    # @api public
+    # Define a new hook
+    # @param name[Symbol]
+    def self.hook(name)
+      @defined_hooks ||= []
+      @defined_hooks  << name
+    end
+
+    def hook(name)
+      hook = @hooks[name]
+      unless hook
+        raise UnknownHook.new(name)
+      end
+      hook
+    end
+
+
+    # @api public
+    # Run defined actions for a hook
+    # @param name[Symbol] hook identification, no error is raised on unknown hooks
+    # @param state[Symbol] state that should be executed (:before, :after or :around)
+    def run_hook(name, state)
+      hook(name)[state].each do |block|
+        instance_eval(&block)
+      end
+    end
+
     # default implementation:
     #########################
 
@@ -158,6 +194,18 @@ module Cany
           end
           EOS
         end
+      end
+
+      def before(hook_name, &block)
+        @recipe.hook(hook_name)[:before] << block
+      end
+
+      def after(hook_name, &block)
+        @recipe.hook(hook_name)[:after] << block
+      end
+
+      def around(hook_name, &block)
+        @recipe.hook(hook_name)[:around] << block
       end
     end
   end

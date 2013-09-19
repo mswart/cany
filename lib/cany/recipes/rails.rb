@@ -2,6 +2,7 @@ module Cany
   module Recipes
     class Rails < Recipe
       register_as :rails
+      hook :env
 
       class DSL < Recipe::DSL
         delegate :compile_assets
@@ -20,12 +21,14 @@ module Cany
       end
 
       def build
+        run_hook :env, :before
         ENV['RAILS_ENV'] = 'production'
         ruby_bin 'bundle', 'exec', 'rake', 'assets:precompile' if compile_assets
         inner.build
       end
 
       def binary
+        run_hook :env, :after
         %w(app config.ru db Gemfile Gemfile.lock lib public Rakefile vendor).each do |item|
           install item, "/usr/share/#{spec.name}" if File.exists? item
         end

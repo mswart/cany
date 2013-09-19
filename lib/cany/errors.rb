@@ -20,4 +20,10 @@ module Cany
       super "Could not execute: #{args.join(' ')}"
     end
   end
+
+  class UnknownHook < Error
+    def initialize(hook)
+      super "Unknown hook \"#{hook}\""
+    end
+  end
 end
