@@ -24,10 +24,16 @@ module Cany
 
     # Creates a new instance of this recipe
     # @param [Cany::Specification] spec Specification object
+    def initialize(spec, &configure_block)
+      @spec = spec
+      self.class.const_get(:DSL).new(self).exec &configure_block if configure_block
+      @inner = nil
+    end
+
+    # Specify the inner recipe for the current one.
     # @param [Cany::Recipe, nil] inner Inner recipes should should be call between the pre and post
     #  actions of this class. Nil means most inner recipes.
-    def initialize(spec, inner)
-      @spec = spec
+    def inner=(inner)
       @inner = inner
     end
 
@@ -123,6 +129,32 @@ module Cany
     # create binary (package) version of this file (means make install)
     def binary
       inner.binary
+    end
+
+
+    # This superclass helps recipes to create easily an own mini DSL to let the user configure the
+    # recipe with it.
+    class DSL
+      def initialize(recipe)
+        @recipe = recipe
+      end
+
+      # Evaluate a given block inside the dsl.
+      def exec(&block)
+        instance_eval &block
+      end
+
+      # This is a simple delegate helper. It can be used to pass option directly to recipe instance.
+      # @param [Symbol] param1 Multiple symbol names
+      def self.delegate(*methods)
+        methods.each do |method|
+          module_eval(<<-EOS, __FILE__, __LINE__)
+          def #{method}(*args, &block)
+            @recipe.send :'#{method}=', *args, &block
+          end
+          EOS
+        end
+      end
     end
   end
 end

@@ -3,15 +3,25 @@ module Cany
     class Rails < Recipe
       register_as :rails
 
+      class DSL < Recipe::DSL
+        delegate :compile_assets
+      end
+
+      attr_accessor :compile_assets
+
+      def initialize(*args)
+        @compile_assets = true
+        super
+      end
+
       def clean
         rmtree 'tmp', 'public/assets'
         inner.clean
       end
 
       def build
-        ENV['RAILS_ENV'] = 'assets'
-        ruby_bin 'bundle', 'exec', 'rake', 'assets:precompile'
         ENV['RAILS_ENV'] = 'production'
+        ruby_bin 'bundle', 'exec', 'rake', 'assets:precompile' if compile_assets
         inner.build
       end
 

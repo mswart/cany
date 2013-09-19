@@ -23,8 +23,8 @@ module Cany
 
       # This include the given recipe into the build process.
       # @param [Symbol] name The name of the recipe as symbol.
-      def use(name)
-        @specification.recipes << name
+      def use(name, &block)
+        @specification.recipes << Cany::Recipe.from_name(name).new(@specification, &block)
       end
 
       def build(&block)

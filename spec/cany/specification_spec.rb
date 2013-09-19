@@ -55,7 +55,8 @@ describe Cany::Specification do
       spec = Cany::Specification.new do
         use :bundler
       end
-      expect(spec.recipes).to eq [:bundler]
+      expect(spec.recipes.size).to eq 1
+      expect(spec.recipes[0]).to be_instance_of(Cany::Recipes::Bundler)
     end
 
     it 'should accept a block for own build steps' do

@@ -23,7 +23,7 @@ describe Cany::Dpkg::Builder do
 
   describe '#setup_recipes' do
     it 'should always setup debhelper recipe' do
-      expect(Cany::Dpkg::DebHelperRecipe).to receive(:new).with(spec, nil)
+      expect(Cany::Dpkg::DebHelperRecipe).to receive(:new).with(spec)
       builder.setup_recipes
     end
 
@@ -32,9 +32,8 @@ describe Cany::Dpkg::Builder do
         use :bundler
         use :rails
       end
-      expect(Cany::Dpkg::DebHelperRecipe).to receive(:new).ordered.with(spec, nil).and_call_original
-      expect(Cany::Recipes::Rails).to receive(:new).ordered.with(spec, kind_of(Cany::Dpkg::DebHelperRecipe)).and_call_original
-      expect(Cany::Recipes::Bundler).to receive(:new).ordered.with(spec, kind_of(Cany::Recipes::Rails)).and_call_original
+      expect_any_instance_of(Cany::Recipes::Rails).to receive(:inner=).with(kind_of(Cany::Dpkg::DebHelperRecipe)).and_call_original
+      expect_any_instance_of(Cany::Recipes::Bundler).to receive(:inner=).with(kind_of(Cany::Recipes::Rails))
       builder.setup_recipes
     end
   end

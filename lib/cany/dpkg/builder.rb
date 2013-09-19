@@ -27,9 +27,10 @@ module Cany
       # This method creates recipe instances for all required recipes from the given spec.
       def setup_recipes
         @recipes = []
-        @recipes << DebHelperRecipe.new(spec, nil)
-        spec.recipes.reverse.each do |name|
-          @recipes.unshift Recipe.from_name(name).new(spec, @recipes.first)
+        @recipes << DebHelperRecipe.new(spec)
+        spec.recipes.reverse.each do |recipe|
+          recipe.inner = @recipes.first
+          @recipes.unshift recipe
         end
       end
     end
