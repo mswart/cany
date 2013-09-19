@@ -73,7 +73,10 @@ module Cany
         lock_path = File.join(spec.base_dir, 'Gemfile.lock')
         extra_libs = {
             pg: ['libpq-dev', 'libpq5'],
-            ethon: ['libcurl3 | libcurl3-gnutls | libcurl3-nss', 'libcurl3 | libcurl3-gnutls | libcurl3-nss']
+            ethon: ['libcurl3 | libcurl3-gnutls | libcurl3-nss', 'libcurl3 | libcurl3-gnutls | libcurl3-nss'],
+            charlock_holmes: ['libicu-dev', 'libicu48'],
+            nokogiri: ['libxml2-dev, libxslt1-dev', 'libxml2, libxslt1.1'],
+            mysql2: ['libmysqlclient-dev', 'libmysqlclient18'],
         }
         src_deps = ['debhelper (>= 7.0.50~)', ruby_deb, ruby_deb + '-dev']
         bin_deps = ['${shlibs:Depends}', '${misc:Depends}', ruby_deb]
