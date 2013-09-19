@@ -29,7 +29,10 @@ module Cany
       @inner = nil
       @hooks = Hash[(self.class.defined_hooks || []).map do |name|
         states = {}
-        states.default = []
+        states.default_proc = Proc.new do |hash, state|
+          hash[state] = [] unless hash.include? state
+          hash[state]
+        end
         [name, states]
       end]
       self.class.const_get(:DSL).new(self).exec &configure_block if configure_block
@@ -139,13 +142,13 @@ module Cany
       hook
     end
 
-
     # @api public
     # Run defined actions for a hook
     # @param name[Symbol] hook identification, no error is raised on unknown hooks
     # @param state[Symbol] state that should be executed (:before, :after or :around)
     def run_hook(name, state)
       hook(name)[state].each do |block|
+        puts "run #{block} for hook #{name} in state #{state} ..."
         instance_eval(&block)
       end
     end
