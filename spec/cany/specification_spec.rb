@@ -77,4 +77,24 @@ describe Cany::Specification do
       expect(spec.binary).to be_a_kind_of Proc
     end
   end
+
+  context 'with a required cany version' do
+    let(:spec) { Cany::Specification.new { name 'test-spec' } }
+    subject { spec }
+
+    it 'pass if it matches cany\'s version' do
+      expect(Cany::VERSION).to receive(:to_s).at_least(:once).and_return '0.1.1'
+      spec.setup { require_cany '~> 0.1' }
+    end
+
+    it 'fail if cany\'s version is to old' do
+      expect(Cany::VERSION).to receive(:to_s).at_least(:once).and_return '0.0.1'
+      expect { spec.setup { require_cany '~> 0.1' } }.to raise_exception Cany::UnsupportedVersion, /.*require.*"~> 0\.1" but .* "0.0.1"/
+    end
+
+    it 'fail if cany\'s version is to new' do
+      expect(Cany::VERSION).to receive(:to_s).at_least(:once).and_return '1.0'
+      expect { spec.setup { require_cany '~> 0.1' } }.to raise_exception Cany::UnsupportedVersion, /.*require.*"~> 0\.1" but .* "1.0"/
+    end
+  end
 end

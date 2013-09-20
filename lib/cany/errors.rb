@@ -1,5 +1,5 @@
 module Cany
-  # Cany base error, design to catch all cany errors at once
+  # Cany base error, design to catch all Cany errors at once
   class Error < StandardError
   end
 
@@ -24,6 +24,15 @@ module Cany
   class UnknownHook < Error
     def initialize(hook)
       super "Unknown hook \"#{hook}\""
+    end
+  end
+
+  # This exception is raised if the running Cany version satisfies not the
+  # required Cany version constraint from the canspec.
+  class UnsupportedVersion < Error
+    def initialize(required_version)
+      super "The package specification requires Cany in version" \
+        " \"#{required_version}\" but Cany has version \"#{Cany::VERSION}\""
     end
   end
 end
