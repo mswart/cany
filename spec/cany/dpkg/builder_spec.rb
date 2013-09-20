@@ -22,19 +22,31 @@ describe Cany::Dpkg::Builder do
   let(:builder) { Cany::Dpkg::Builder.new(spec) }
 
   describe '#setup_recipes' do
+    subject { builder.setup_recipes }
     it 'should always setup debhelper recipe' do
-      expect(Cany::Dpkg::DebHelperRecipe).to receive(:new).with(spec)
-      builder.setup_recipes
+      expect(Cany::Dpkg::DebHelperRecipe).to receive(:new).with(spec).and_call_original
+      subject
     end
 
-    it 'should instance any used recipes' do
-      spec.setup do
-        use :bundler
-        use :rails
+    context 'with loaded recipes' do
+      before do
+        spec.setup do
+          use :bundler
+          use :rails
+        end
       end
-      expect_any_instance_of(Cany::Recipes::Rails).to receive(:inner=).with(kind_of(Cany::Dpkg::DebHelperRecipe)).and_call_original
-      expect_any_instance_of(Cany::Recipes::Bundler).to receive(:inner=).with(kind_of(Cany::Recipes::Rails))
-      builder.setup_recipes
+      it 'should instance any used recipes' do
+        expect_any_instance_of(Cany::Recipes::Rails).to receive(:inner=).with(kind_of(Cany::Dpkg::DebHelperRecipe)).and_call_original
+        expect_any_instance_of(Cany::Recipes::Bundler).to receive(:inner=).with(kind_of(Cany::Recipes::Rails))
+        subject
+      end
+
+      it 'should call prepare on all recipes' do
+        expect_any_instance_of(Cany::Dpkg::DebHelperRecipe).to receive(:prepare).and_call_original
+        expect_any_instance_of(Cany::Recipes::Bundler).to receive(:prepare).and_call_original
+        expect_any_instance_of(Cany::Recipes::Rails).to receive(:prepare).and_call_original
+        subject
+      end
     end
   end
 

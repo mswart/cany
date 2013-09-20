@@ -20,6 +20,10 @@ module Cany
         inner.clean
       end
 
+      def prepare
+        recipe(:bundler).configure :env_vars, RAILS_ENV: 'production'
+      end
+
       def build
         run_hook :env, :before
         ENV['RAILS_ENV'] = 'production'
