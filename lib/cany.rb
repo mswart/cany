@@ -22,4 +22,18 @@ module Cany
     spec.base_dir = directory
     spec
   end
+
+  # This methods creates a hash that returns an array as default value and also stores it
+  # directly inside the hash, so that the return value can be changed without additional actions.
+  # @example
+  #   hash = hash_with_array_as_default
+  #   hash[:hans] << 'otto'
+  #   hash[:hash] == ['otto']
+  def self.hash_with_array_as_default
+    {}.tap do |hash|
+      hash.default_proc = Proc.new do |_, key|
+        hash[key] = []
+      end
+    end
+  end
 end

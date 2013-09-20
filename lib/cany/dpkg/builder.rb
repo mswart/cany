@@ -32,6 +32,7 @@ module Cany
           recipe.inner = @recipes.first
           @recipes.unshift recipe
         end
+        @recipes.map(&:prepare)
       end
     end
   end

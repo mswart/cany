@@ -16,9 +16,10 @@ module Cany
     # @api public
     # Looks for the class registered for the given name
     # @param [Symbol] name the name the class is search for
-    # @return [Cany::Recipe, nil] Returns the found class or nil if no class is registered on this
-    #  name
+    # @return [Cany::Recipe] Returns the found class or nil
+    # @raises UnknownRecipe if there is no recipe registered for this name.
     def self.from_name(name)
+      raise UnknownRecipe.new(name) unless @@recipes[name]
       @@recipes[name]
     end
 
@@ -28,14 +29,12 @@ module Cany
       @spec = spec
       @inner = nil
       @hooks = Hash[(self.class.defined_hooks || []).map do |name|
-        states = {}
-        states.default_proc = Proc.new do |hash, state|
-          hash[state] = [] unless hash.include? state
-          hash[state]
-        end
-        [name, states]
+        [name, Cany.hash_with_array_as_default]
       end]
-      self.class.const_get(:DSL).new(self).exec &configure_block if configure_block
+      @options = Hash[(self.class.defined_options || []).map do |name|
+        [name, Cany.hash_with_array_as_default]
+      end]
+      self.class.const_get(:DSL).new(self).exec(&configure_block) if configure_block
     end
 
     # Specify the inner recipe for the current one.
@@ -63,7 +62,7 @@ module Cany
     def exec(*args)
       args.flatten!
       puts "   #{args.join(' ')}"
-      unless system *args
+      unless system(*args)
         raise Cany::CommandExecutionFailed.new args
       end
     end
@@ -123,7 +122,7 @@ module Cany
     end
 
     class << self
-      attr_accessor :defined_hooks
+      attr_accessor :defined_hooks, :defined_options
 
       # @api public
       # Define a new hook
@@ -132,12 +131,38 @@ module Cany
         @defined_hooks ||= []
         @defined_hooks  << name
       end
+
+      # @api public
+      # Define a configure option. These kind of option are design for other
+      # recipes not for the user. See Recipe::DSL for this.
+      # @param name[Symbol] The name of the option. The option name is scoped
+      #    inside a recipe.
+      def option(name)
+        @defined_options ||= []
+        @defined_options  << name
+      end
     end
 
     def hook(name)
       @hooks[name].tap do |hook|
-        raise UnknownHook.new(name) unless hook
+        raise UnknownHook.new name unless hook
       end
+    end
+
+    # @api public
+    # Ask for the current values for a defined option
+    def option(name)
+      @options[name].tap do |option|
+        raise UnknownOption.new name unless option
+      end
+    end
+
+    # @api public
+    # Configure an other recipe
+    # @param name[Symbol] The option name
+    # @param options[Hash] The configuration data itself.
+    def configure(name, options)
+      option(name).merge! options
     end
 
     # @api public
@@ -151,6 +176,17 @@ module Cany
       end
     end
 
+    # @api public
+    # Access the recipe instance from another loaded recipe of this
+    # specification
+    # @param name[Symbol] recipe name
+    def recipe(name)
+      recipe_class = Recipe.from_name(name)
+      @spec.recipes.each do |one_recipe|
+        return one_recipe if one_recipe.instance_of? recipe_class
+      end
+      raise UnloadedRecipe.new name
+    end
 
     # default implementation:
     #########################
@@ -159,6 +195,12 @@ module Cany
     # clean the build directory from all temporary and created files
     def clean
       inner.clean
+    end
+
+    # @api public
+    # Prepares the recipes to run things. This is call exactly once for all recipes before
+    # recipes actions are executed.
+    def prepare
     end
 
     # @api public

@@ -55,25 +55,11 @@ module Cany
     end
 
     def distros
-      @distros ||= hash_with_array_as_default
+      @distros ||= Cany.hash_with_array_as_default
     end
 
     def distro_releases
-      @distro_releases ||= hash_with_array_as_default
-    end
-
-    # This methods creates a hash that returns an array as default value and also stores it
-    # directly inside the hash, so that the return value can be changed without additional actions.
-    # @example
-    #   hash = hash_with_array_as_default
-    #   hash[:hans] << 'otto'
-    #   hash[:hash] == ['otto']
-    def hash_with_array_as_default
-      {}.tap do |hash|
-        hash.default_proc = Proc.new do |_, key|
-          hash[key] = []
-        end
-      end
+      @distro_releases ||= Cany.hash_with_array_as_default
     end
   end
 end

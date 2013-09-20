@@ -11,6 +11,7 @@ require 'timecop'
 class TestRecipe < Cany::Recipe
   register_as :test_recipe
   hook :test_hook
+  option :test_conf
 end
 
 Dir[File.expand_path('spec/support/**/*.rb')].each {|f| require f}

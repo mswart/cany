@@ -67,4 +67,66 @@ describe Cany::Recipe do
       end.to raise_exception Cany::UnknownHook, /Unknown hook.*test_hook/
     end
   end
+
+  describe 'recipe configure options' do
+    let(:option_name) { :test_conf }
+    subject { test_recipe.option option_name }
+
+    context 'with an undefined config' do
+      let(:option_name) { :unknown_option }
+      it 'should raise an exception' do
+        expect { subject }.to raise_exception Cany::UnknownOption, /Unknown option .*unknown_option/
+      end
+    end
+
+    context 'with a defined config' do
+      let(:recipe2) { Cany::Recipe.new(spec) }
+      it 'should be initialized with {} per default' do
+        expect(subject).to eq Hash.new
+      end
+
+      context 'should be configurable' do
+        before do
+          test_recipe.configure :test_conf, env: 'production'
+        end
+        it { expect(subject).to eq(env: 'production') }
+      end
+
+      context 'options should be merged between multiple calls' do
+        before do
+          test_recipe.configure :test_conf, env: 'production'
+          test_recipe.configure :test_conf, env2: 'hans'
+        end
+        it { expect(subject).to eq(env: 'production', env2: 'hans') }
+      end
+    end
+  end
+
+  describe '#recipe' do
+    let(:other_recipe) { :test_recipe }
+    subject { recipe.recipe other_recipe }
+    describe 'to access other loaded recipe' do
+      before do
+        spec.setup do
+          use :test_recipe
+        end
+      end
+      it 'should return the recipe instance from this specification' do
+        expect(subject).to be spec.recipes.first
+      end
+    end
+
+    describe 'to access an unloaded recipe' do
+      it 'should raise an exception' do
+        expect { subject }.to raise_exception Cany::UnloadedRecipe, /[Rr]ecipe.+test_recipe.+no.+loaded/
+      end
+    end
+
+    describe 'to access an unknown recipe' do
+      let(:other_recipe) { :unknown_recipe }
+      it 'should raise an exception' do
+        expect { subject }.to raise_exception Cany::UnknownRecipe, /[Rr]ecipe.+unknown_recipe.+not.+registered./
+      end
+    end
+  end
 end

@@ -27,6 +27,24 @@ module Cany
     end
   end
 
+  class UnknownOption < Error
+    def initialize(option)
+      super "Unknown option \"#{option}\""
+    end
+  end
+
+  class UnloadedRecipe < Error
+    def initialize(name)
+      super "The recipe \"#{name}\" is not loaded by the specification."
+    end
+  end
+
+  class UnknownRecipe < Error
+    def initialize(name)
+      super "The recipe \"#{name}\" is not registered!"
+    end
+  end
+
   # This exception is raised if the running Cany version satisfies not the
   # required Cany version constraint from the canspec.
   class UnsupportedVersion < Error
