@@ -6,7 +6,7 @@ module Cany
       end
 
       def exec(&block)
-        instance_eval &block
+        instance_eval(&block)
       end
 
       def self.delegate(*methods)
