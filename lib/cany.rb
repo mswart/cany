@@ -1,6 +1,7 @@
 require 'cany/version'
 require 'cany/errors'
 require 'cany/specification'
+require 'cany/dependency'
 require 'cany/recipe'
 require 'cany/recipes/bundler'
 require 'cany/recipes/rails'
