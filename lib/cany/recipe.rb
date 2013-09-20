@@ -124,22 +124,20 @@ module Cany
 
     class << self
       attr_accessor :defined_hooks
-    end
 
-    # @api public
-    # Define a new hook
-    # @param name[Symbol]
-    def self.hook(name)
-      @defined_hooks ||= []
-      @defined_hooks  << name
+      # @api public
+      # Define a new hook
+      # @param name[Symbol]
+      def hook(name)
+        @defined_hooks ||= []
+        @defined_hooks  << name
+      end
     end
 
     def hook(name)
-      hook = @hooks[name]
-      unless hook
-        raise UnknownHook.new(name)
+      @hooks[name].tap do |hook|
+        raise UnknownHook.new(name) unless hook
       end
-      hook
     end
 
     # @api public
@@ -152,6 +150,7 @@ module Cany
         instance_eval(&block)
       end
     end
+
 
     # default implementation:
     #########################
