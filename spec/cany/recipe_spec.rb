@@ -155,6 +155,14 @@ describe Cany::Recipe do
           should be_build
         end
       end
+
+      context 'with a version option' do
+        before { recipe.depend 'hans-otto', version: '>= 4' }
+        it 'should be convert' do
+          should be_instance_of Cany::Dependency
+          expect(subject.determine(:a, :b)).to match_array [['hans-otto', '>= 4']]
+        end
+      end
     end
     context 'with a dependency object' do
       let(:dep) { Cany::Dependency.new }

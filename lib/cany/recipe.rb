@@ -199,13 +199,14 @@ module Cany
     #   @param opts[Hash] Options influencing the create Dependency object.
     #   @option opts[Symbol, Array<Symbol>] :situation For which situations
     #     is this dependency. Default is :runtime
+    #   @option opts[Symbol] :version The default version
     def depend(depend, opts={})
       @spec.dependencies << if depend.kind_of? Dependency
         depend
       else
-        opts = { situation: :runtime }.merge opts
+        opts = { situation: :runtime, version: nil }.merge opts
         dep = Dependency.new
-        dep.define_default depend
+        dep.define_default depend, opts[:version]
         dep.situations = opts[:situation]
         dep
       end
@@ -218,6 +219,12 @@ module Cany
     # Prepares the recipes to run things. This is call exactly once for all recipes before
     # recipes actions are executed.
     def prepare
+    end
+
+    # @api public
+    # This step is executed to create the distribution specific packages from canspec. The recipe
+    # can e.g. add additional dependencies or adjust the package meta data.
+    def create(creator)
     end
 
     # @api public

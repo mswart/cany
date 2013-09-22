@@ -9,6 +9,14 @@ module Cany
         exec 'dh_prep'
       end
 
+      def create(creator)
+        depend 'debhelper', version: '>= 7.0.50~', situation: :build
+        depend '${shlibs:Depends}'
+        depend '${misc:Depends}'
+        depend creator.ruby_deb, situation: [:build, :runtime]
+        depend creator.ruby_deb + '-dev', situation: :build
+      end
+
       def clean
         exec %w(dh clean)
       end

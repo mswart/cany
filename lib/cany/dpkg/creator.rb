@@ -48,6 +48,12 @@ module Cany
       def run(*args)
         parse_opts *args
 
+        # let recipes influence package creating
+        @spec.recipes << DebHelperRecipe.new(spec)
+        @spec.recipes.each do |recipe|
+          recipe.create(self)
+        end
+
         Dir.mkdir debian
         create_compact
         create_source_format
@@ -78,8 +84,7 @@ module Cany
             nokogiri: ['libxml2-dev, libxslt1-dev', 'libxml2, libxslt1.1'],
             mysql2: ['libmysqlclient-dev', 'libmysqlclient18'],
         }
-        src_deps = ['debhelper (>= 7.0.50~)', ruby_deb, ruby_deb + '-dev']
-        bin_deps = ['${shlibs:Depends}', '${misc:Depends}', ruby_deb]
+        src_deps, bin_deps = build_dependencies
         if File.exists? lock_path
           lock = Bundler::LockfileParser.new File.read lock_path
           lock.specs.each do |spec|
@@ -143,6 +148,25 @@ module Cany
           f.write "\n"
           f.write " -- #{spec.maintainer_name} <#{spec.maintainer_email}>  #{Time.now.strftime "%a, %d %b %Y %H:%M:%S %z" }"
         end
+      end
+
+      private
+
+      def build_dependencies
+        [
+          calculcate_dependencies(@spec.dependencies.select(&:build?)),
+          calculcate_dependencies(@spec.dependencies.select(&:runtime?))
+        ]
+      end
+
+      def calculcate_dependencies(dependencies)
+        deps = []
+        dependencies.each do |dep|
+          deps += dep.determine(:ubuntu, :precise).map do |pkg, version|
+            !version.nil? ? "#{pkg} (#{version})" : pkg
+          end
+        end
+        deps
       end
     end
   end
