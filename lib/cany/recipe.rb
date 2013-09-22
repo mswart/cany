@@ -61,7 +61,7 @@ module Cany
     #   exec 'echo', 'a', 'b'
     def exec(*args)
       args.flatten!
-      puts "   #{args.join(' ')}"
+      Cany.logger.info args.join(' ')
       unless system(*args)
         raise Cany::CommandExecutionFailed.new args
       end
@@ -171,7 +171,7 @@ module Cany
     # @param state[Symbol] state that should be executed (:before, :after or :around)
     def run_hook(name, state)
       hook(name)[state].each do |block|
-        puts "run #{block} for hook #{name} in state #{state} ..."
+        Cany.logger.info  "run #{block} for hook #{name} in state #{state} ..."
         instance_eval(&block)
       end
     end

@@ -1,3 +1,5 @@
+require 'logger'
+
 require 'cany/version'
 require 'cany/errors'
 require 'cany/specification'
@@ -35,5 +37,23 @@ module Cany
         hash[key] = []
       end
     end
+  end
+
+  def self.logger
+    @logger ||= create_logger
+  end
+
+  def self.create_logger
+    logger = Logger.new(STDOUT)
+    logger.level = Logger::INFO
+    org_formatter = Logger::Formatter.new
+    logger.formatter = proc do |severity, datetime, progname, msg|
+      if severity == "INFO"
+        "   #{msg}\n"
+      else
+        org_formatter.call severity, datetime, progname, msg
+      end
+    end
+    logger
   end
 end

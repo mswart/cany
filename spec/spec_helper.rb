@@ -27,6 +27,9 @@ class TestRecipe < Cany::Recipe
   option :test_conf
 end
 
+Cany.logger.level = Logger::FATAL
+
+
 Dir[File.expand_path('spec/support/**/*.rb')].each {|f| require f}
 
 RSpec.configure do |config|
