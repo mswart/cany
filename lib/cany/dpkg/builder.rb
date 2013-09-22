@@ -11,10 +11,6 @@ module Cany
         @spec = spec
       end
 
-      def debian(*args)
-        File.join spec.base_dir, 'debian', *args
-      end
-
       # This method is called to do the actual work
       # @api public
       # @param [String] build_step_name The name of the dpkg build step (clean, build, binary)
