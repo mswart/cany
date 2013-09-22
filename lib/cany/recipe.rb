@@ -66,6 +66,7 @@ module Cany
         raise Cany::CommandExecutionFailed.new args
       end
     end
+    # exec is special name in same situations it may no work but this alias should work always
     alias :exec_ :exec
 
     # @api public
@@ -191,25 +192,10 @@ module Cany
     # @api public
     # Adds a new dependency for the software. See Cany::Dependency for a more
     # abstract description about dependencies
-    # @overload depend(dep)
-    #   @param depend[Cany::Dependency] A complete Dependency object
-    # @overload depend(default, opts)
-    #   Creates a new dependency object
-    #   @param depend[Symbol] The default
-    #   @param opts[Hash] Options influencing the create Dependency object.
-    #   @option opts[Symbol, Array<Symbol>] :situation For which situations
-    #     is this dependency. Default is :runtime
-    #   @option opts[Symbol] :version The default version
-    def depend(depend, opts={})
-      @spec.dependencies << if depend.kind_of? Dependency
-        depend
-      else
-        opts = { situation: :runtime, version: nil }.merge opts
-        dep = Dependency.new
-        dep.define_default depend, opts[:version]
-        dep.situations = opts[:situation]
-        dep
-      end
+    # See Cany::Mixins::DependMixin for parameter description
+    include Cany::Mixins::DependMixin
+    def depend(*args)
+      @spec.dependencies << create_dep(*args)
     end
 
     # default implementation:
@@ -255,7 +241,7 @@ module Cany
 
       # Evaluate a given block inside the dsl.
       def exec(&block)
-        instance_eval &block
+        instance_eval(&block)
       end
 
       # This is a simple delegate helper. It can be used to pass option directly to recipe instance.

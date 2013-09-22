@@ -75,26 +75,7 @@ module Cany
       end
 
       def create_source_control
-        require 'bundler'
-        lock_path = File.join(spec.base_dir, 'Gemfile.lock')
-        extra_libs = {
-            pg: ['libpq-dev', 'libpq5'],
-            ethon: ['libcurl3 | libcurl3-gnutls | libcurl3-nss', 'libcurl3 | libcurl3-gnutls | libcurl3-nss'],
-            charlock_holmes: ['libicu-dev', 'libicu48'],
-            nokogiri: ['libxml2-dev, libxslt1-dev', 'libxml2, libxslt1.1'],
-            mysql2: ['libmysqlclient-dev', 'libmysqlclient18'],
-        }
         src_deps, bin_deps = build_dependencies
-        if File.exists? lock_path
-          lock = Bundler::LockfileParser.new File.read lock_path
-          lock.specs.each do |spec|
-            if extra_libs.has_key? spec.name.to_sym
-              src, bin = extra_libs[spec.name.to_sym]
-              src_deps << src
-              bin_deps << bin
-            end
-          end
-        end
         File.open debian('control'), 'w' do |f|
           # write source package fields:
           f.write("Source: #{spec.name}\n")

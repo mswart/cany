@@ -129,6 +129,9 @@ describe Cany::Dpkg::Creator do
 
       it 'should add extra deps in specific gems are used' do
         FileUtils.copy File.expand_path('../../../fixtures/testgem.lock', __FILE__), File.join(dir, 'Gemfile.lock')
+        spec.setup do
+          use :bundler
+        end
         run
         expect(subject.paragraphs.size).to eq 2
         source =

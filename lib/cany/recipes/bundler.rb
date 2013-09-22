@@ -14,6 +14,19 @@ module Cany
         configure :env_vars, GEM_PATH: 'bundler'
       end
 
+      def create(creator)
+        require 'bundler'
+        lock_path = File.join(spec.base_dir, 'Gemfile.lock')
+        if File.exists? lock_path
+          lock = ::Bundler::LockfileParser.new File.read lock_path
+          lock.specs.each do |spec|
+            Gem.get(spec.name.to_sym).dependencies.each do |dep|
+              depend dep
+            end
+          end
+        end
+      end
+
       def build
         ENV['GEM_PATH'] = 'bundler'
         ENV['PATH'] = 'bundler/bin:' + ENV['PATH']
