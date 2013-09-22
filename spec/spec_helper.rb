@@ -1,6 +1,19 @@
-require 'coveralls'
-Coveralls.wear! do
-  add_filter 'spec'
+if ENV['CI']
+  require 'coveralls'
+  Coveralls.wear! do
+    add_filter 'spec'
+  end
+end
+
+if ENV["COVERAGE"]
+  require 'simplecov'
+
+  SimpleCov.start do
+    add_filter 'spec'
+
+    add_group 'DPKG', 'lib/cany/dpkg'
+    add_group('Recipes') { |file| file.filename.include? 'recipe' }
+  end
 end
 
 require 'cany'
