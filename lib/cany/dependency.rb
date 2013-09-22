@@ -13,6 +13,20 @@ module Cany
   #     possible to build or run the application.
   # Other priorities are planed but currently not implemented.
   class Dependency
+    def initialize
+      @default = []
+      @distros = Cany.hash_with_array_as_default
+      @distro_releases ||= Cany.hash_with_array_as_default
+      @situations = [:runtime]
+    end
+
+    attr_reader :situations
+    def situations=(value)
+      @situations = value.kind_of?(Array) ? value : [value]
+    end
+    def runtime?; @situations.include? :runtime; end
+    def build?; @situations.include? :build; end
+
     # Define the default package name and an optional version constraint for all
     # @param name[String] A package name
     # @param version[String, nil] A version constraint
@@ -50,16 +64,6 @@ module Cany
 
     protected
 
-    def default
-      @default ||= []
-    end
-
-    def distros
-      @distros ||= Cany.hash_with_array_as_default
-    end
-
-    def distro_releases
-      @distro_releases ||= Cany.hash_with_array_as_default
-    end
+    attr_reader :default, :distros, :distro_releases
   end
 end

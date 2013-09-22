@@ -80,4 +80,41 @@ describe Cany::Dependency do
       end
     end
   end
+
+  context 'situations property' do
+    subject { dep.situations }
+    it 'should be runtime per default' do
+      should match_array [:runtime]
+    end
+
+    context 'set to single value' do
+      before { dep.situations = :build }
+      it 'should convert them to an array' do
+        should match_array [:build]
+      end
+    end
+
+    context 'set to multiple values' do
+      before { dep.situations = [:build, :runtime] }
+      it 'should remain the array' do
+        should match_array [:build, :runtime]
+      end
+    end
+
+    context 'accessabled via shortcut properties' do
+      subject { dep }
+      it 'should be runtime and not build per default' do
+        should be_runtime
+        should_not be_build
+      end
+
+      context 'with changed value' do
+        before { dep.situations = [:build, :hans] }
+        it 'should behave accordingly' do
+          should_not be_runtime
+          should be_build
+        end
+      end
+    end
+  end
 end

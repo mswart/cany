@@ -188,19 +188,42 @@ module Cany
       raise UnloadedRecipe.new name
     end
 
+    # @api public
+    # Adds a new dependency for the software. See Cany::Dependency for a more
+    # abstract description about dependencies
+    # @overload depend(dep)
+    #   @param depend[Cany::Dependency] A complete Dependency object
+    # @overload depend(default, opts)
+    #   Creates a new dependency object
+    #   @param depend[Symbol] The default
+    #   @param opts[Hash] Options influencing the create Dependency object.
+    #   @option opts[Symbol, Array<Symbol>] :situation For which situations
+    #     is this dependency. Default is :runtime
+    def depend(depend, opts={})
+      @spec.dependencies << if depend.kind_of? Dependency
+        depend
+      else
+        opts = { situation: :runtime }.merge opts
+        dep = Dependency.new
+        dep.define_default depend
+        dep.situations = opts[:situation]
+        dep
+      end
+    end
+
     # default implementation:
     #########################
-
-    # @api public
-    # clean the build directory from all temporary and created files
-    def clean
-      inner.clean
-    end
 
     # @api public
     # Prepares the recipes to run things. This is call exactly once for all recipes before
     # recipes actions are executed.
     def prepare
+    end
+
+    # @api public
+    # clean the build directory from all temporary and created files
+    def clean
+      inner.clean
     end
 
     # @api public

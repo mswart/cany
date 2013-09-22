@@ -105,27 +105,63 @@ describe Cany::Recipe do
   describe '#recipe' do
     let(:other_recipe) { :test_recipe }
     subject { recipe.recipe other_recipe }
-    describe 'to access other loaded recipe' do
-      before do
-        spec.setup do
-          use :test_recipe
-        end
-      end
+    context 'to access other loaded recipe' do
+      before { spec.setup { use :test_recipe } }
       it 'should return the recipe instance from this specification' do
         expect(subject).to be spec.recipes.first
       end
     end
 
-    describe 'to access an unloaded recipe' do
+    context 'to access an unloaded recipe' do
       it 'should raise an exception' do
         expect { subject }.to raise_exception Cany::UnloadedRecipe, /[Rr]ecipe.+test_recipe.+no.+loaded/
       end
     end
 
-    describe 'to access an unknown recipe' do
+    context 'to access an unknown recipe' do
       let(:other_recipe) { :unknown_recipe }
       it 'should raise an exception' do
         expect { subject }.to raise_exception Cany::UnknownRecipe, /[Rr]ecipe.+unknown_recipe.+not.+registered./
+      end
+    end
+  end
+
+  describe '#depend' do
+    subject { spec.dependencies }
+
+    context 'without any call' do
+      it 'it should be empty' do
+        should eq []
+      end
+    end
+
+    context 'with a single string' do
+      subject { super().first }
+
+      context 'without other options' do
+        before { recipe.depend 'hans-otto-lib' }
+        it 'should converted into a runtime dependency object' do
+          should be_instance_of Cany::Dependency
+          should be_runtime
+          should_not be_build
+        end
+      end
+
+      context 'with situation option' do
+        before { recipe.depend 'hans-otto-lib', situation: :build }
+        it 'should converted into a runtime dependency object' do
+          should be_instance_of Cany::Dependency
+          should_not be_runtime
+          should be_build
+        end
+      end
+    end
+    context 'with a dependency object' do
+      let(:dep) { Cany::Dependency.new }
+      subject { super().first }
+      before { recipe.depend dep }
+      it 'should be passed without modification' do
+        should eq dep
       end
     end
   end
