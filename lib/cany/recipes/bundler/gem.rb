@@ -16,6 +16,11 @@ class Cany::Recipes::Bundler::Gem
     DSL.new(get(gem_name)).run &block
   end
 
+  # Clear all stored data. Only used in rspec
+  def self.clear
+    @gems = {}
+  end
+
   attr_reader :name, :dependencies
 
   private

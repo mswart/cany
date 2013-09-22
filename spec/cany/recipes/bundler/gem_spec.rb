@@ -42,6 +42,5 @@ describe Cany::Recipes::Bundler::Gem do
         expect(default).to match_array [ 'hans_otto', nil]
       end
     end
-
   end
 end

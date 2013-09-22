@@ -56,4 +56,9 @@ RSpec.configure do |config|
     @executed_programs = []
     allow_any_instance_of(Cany::Recipe).to receive(:exec) { |*args| @executed_programs << args }
   end
+
+  config.after(:each) do
+    Cany::Recipes::Bundler::Gem.clear
+    load 'cany/recipes/bundler/gem_db.rb'
+  end
 end
