@@ -4,12 +4,14 @@ source 'https://rubygems.org'
 gemspec
 
 group :development do
+  gem 'yard', '~> 0.8.6'
   gem 'guard'
+  gem 'libnotify', :require => false
   gem 'rb-inotify', :require => false
   gem 'rb-fsevent', :require => false
   gem 'rb-fchange', :require => false
   gem 'guard-rspec'
-  gem 'libnotify', :require => false
+  gem 'guard-yard'
 end
 
 group :test do

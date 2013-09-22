@@ -19,7 +19,7 @@ describe Cany::Recipes::Bundler::Gem do
         it { eq gem_name }
       end
 
-      context '\s dependencies' do
+      context '\' dependencies' do
         subject { super().dependencies }
         it 'should be empty per default' do
           should match_array []

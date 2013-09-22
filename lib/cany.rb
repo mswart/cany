@@ -1,6 +1,9 @@
 require 'logger'
 
 module Cany
+  # @raise [MissingSpecification] if no canspec is found in the directory
+  # @raise [MultipleSpecifications] if multiple canspec files are found inside
+  #   the directory
   def self.setup(directory='.')
     specs = Dir[directory + '/*.' + Specification::EXT]
     raise MissingSpecification.new(directory) if specs.size == 0
@@ -11,8 +14,9 @@ module Cany
     spec
   end
 
-  # This methods creates a hash that returns an array as default value and also stores it
-  # directly inside the hash, so that the return value can be changed without additional actions.
+  # This methods creates a hash that returns an array as default value and also
+  # stores it directly inside the hash, so that the return value can be changed
+  # without additional actions.
   # @example
   #   hash = hash_with_array_as_default
   #   hash[:hans] << 'otto'
@@ -25,6 +29,8 @@ module Cany
     end
   end
 
+  # @api public
+  # @return [Logger]
   def self.logger
     @logger ||= create_logger
   end

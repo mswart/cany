@@ -17,7 +17,7 @@ module Cany
     # Looks for the class registered for the given name
     # @param [Symbol] name the name the class is search for
     # @return [Cany::Recipe] Returns the found class or nil
-    # @raises UnknownRecipe if there is no recipe registered for this name.
+    # @raise UnknownRecipe if there is no recipe registered for this name.
     def self.from_name(name)
       raise UnknownRecipe.new(name) unless @@recipes[name]
       @@recipes[name]
@@ -59,11 +59,13 @@ module Cany
     #   exec 'echo', %w(a b)
     #   exec ['echo', 'a', 'b']
     #   exec 'echo', 'a', 'b'
+    # @raise [CommandExecutionFailed] if the executed program exists with a
+    #   non-zero exit code.
     def exec(*args)
       args.flatten!
       Cany.logger.info args.join(' ')
       unless system(*args)
-        raise Cany::CommandExecutionFailed.new args
+        raise CommandExecutionFailed.new args
       end
     end
     # exec is special name in same situations it may no work but this alias should work always
@@ -80,12 +82,12 @@ module Cany
 
     # @api public
     # Install files or directory from the build directory
-    # @param [String] source The relative file name to a filename or directory inside the build
+    # @param source[String] The relative file name to a filename or directory inside the build
     #   directory that should be installed/copied into the destination package
-    # @param [String] destination The diretory name into that the file or directory should be
+    # @param destination[String] The diretory name into that the file or directory should be
     #   installed
-    def install(src, dest_dir)
-      exec 'dh_install', src, dest_dir
+    def install(source, destination)
+      exec 'dh_install', source, destination
     end
 
     # @api public
@@ -201,6 +203,8 @@ module Cany
     # default implementation:
     #########################
 
+    # @!group Recipe Steps - to be oweriden in subclass
+
     # @api public
     # Prepares the recipes to run things. This is call exactly once for all recipes before
     # recipes actions are executed.
@@ -230,6 +234,8 @@ module Cany
     def binary
       inner.binary
     end
+
+    # @!endgroup
 
 
     # This superclass helps recipes to create easily an own mini DSL to let the user configure the

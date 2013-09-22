@@ -24,7 +24,7 @@ module Cany
       # This directive ensures that Cany is used in a specific version. It will pass if the version
       # match or raise an exception if it is an unsupported version.
       # @param version [String] The version constrain the must be satisfied by Cany.
-      # @raises Cany::UnsupportedVersion on version mismatch
+      # @raise Cany::UnsupportedVersion on version mismatch
       def require_cany(version)
         unless Gem::Requirement.create(version).satisfied_by? Gem::Version.new(Cany::VERSION)
           raise UnsupportedVersion.new version

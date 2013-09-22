@@ -9,6 +9,10 @@ guard 'rspec', all_after_pass: true, all_on_start: true do
   watch('spec/spec_helper.rb')                        { "spec" }
 end
 
+guard 'yard' do
+  watch(%r{lib/.+\.rb})
+end
+
 # load Guardfile.local
 local_guardfile = File.dirname(__FILE__) + "/Guardfile.local"
 if File.file?(local_guardfile)
