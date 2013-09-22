@@ -6,7 +6,7 @@ module Cany
     EXT = 'canspec'
 
     attr_accessor :name, :description, :maintainer_name, :maintainer_email, :website, :licence, :version
-    attr_accessor :base_dir, :recipes, :dependencies
+    attr_accessor :base_dir, :recipes, :dependencies, :cany_version_constraint
     attr_accessor :build, :binary
 
     def initialize(dsl=Cany::Specification::DSL, &block)

@@ -203,6 +203,22 @@ describe Cany::Dpkg::Creator do
         expect(subject).to include "\truby1.9.1 -S cany dpkg-builder $@"
         expect(subject).to include "\truby1.9.1 -cS cany >/dev/null || ruby1.9.1 -S gem install --no-ri --no-rdoc --install-dir debian/gems --bindir debian/bin $${CANY_GEM:-cany}"
       end
+
+      it 'should contain cany version constraint' do
+        expect(Cany::VERSION).to receive(:to_s).and_return('0.1').at_least(:once)
+        spec.setup { require_cany '~> 0.1' }
+        run
+
+        should match /gem install.+ \$\${CANY_GEM:-cany}.+--version "~> 0\.1"/
+      end
+
+      it 'should allow pre cany versions if the contraint contain characters' do
+        expect(Cany::VERSION).to receive(:to_s).and_return('0.1.rc2').at_least(:once)
+        spec.setup { require_cany '~> 0.1.rc1' }
+        run
+
+        should match /gem install.+ \$\${CANY_GEM:-cany}.+--version "~> 0\.1\.rc1" --prerelease/
+      end
     end
 
     context 'changelog file' do

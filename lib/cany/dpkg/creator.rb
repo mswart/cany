@@ -108,14 +108,22 @@ module Cany
 
       def create_rules
         File.open debian('rules'), 'w' do |f|
-          f.write("#!/usr/bin/make -f\n")
-          f.write("export PATH := debian/bin:${PATH}\n")
-          f.write("export GEM_PATH := debian/gems:${GEM_PATH}\n")
-          # call cany for every target:
-          f.write("%:\n")
-          f.write("\t#{ruby_exe} -cS cany >/dev/null || #{ruby_exe} -S gem install --no-ri --no-rdoc --install-dir debian/gems --bindir debian/bin $${CANY_GEM:-cany}\n")
-          f.write("\t#{ruby_exe} -S cany dpkg-builder $@\n")
-          f.write("\noverride_dh_prep:\n")
+          unless @spec.cany_version_constraint
+            gem_version = ''
+          else
+            gem_version = " --version \"#{@spec.cany_version_constraint}\""
+            gem_version += ' --prerelease' if @spec.cany_version_constraint.match /[a-zA-Z]/
+          end
+
+          f.write <<EOM.gsub /^            /, ''
+            #!/usr/bin/make -f
+            export PATH := debian/bin:${PATH}
+            export GEM_PATH := debian/gems:${GEM_PATH}
+            %:
+            \t#{ruby_exe} -cS cany >/dev/null || #{ruby_exe} -S gem install --no-ri --no-rdoc --install-dir debian/gems --bindir debian/bin $${CANY_GEM:-cany}#{gem_version}
+            \t#{ruby_exe} -S cany dpkg-builder $@\n
+            override_dh_prep:
+EOM
 
           f.chmod(0755)
         end

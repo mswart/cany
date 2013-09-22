@@ -29,6 +29,7 @@ module Cany
         unless Gem::Requirement.create(version).satisfied_by? Gem::Version.new(Cany::VERSION)
           raise UnsupportedVersion.new version
         end
+        @specification.cany_version_constraint = version
       end
 
       # This include the given recipe into the build process.
