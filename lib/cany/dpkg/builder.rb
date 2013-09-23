@@ -16,6 +16,7 @@ module Cany
       # @param [String] build_step_name The name of the dpkg build step (clean, build, binary)
       def run(build_step_name)
         setup_recipes
+        @recipes.first.exec 'dh_prep' if build_step_name.to_s == 'binary'
         @recipes.first.send build_step_name.to_s
       end
 

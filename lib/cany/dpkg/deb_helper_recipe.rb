@@ -6,7 +6,6 @@ module Cany
       def initialize(*args)
         super *args
         @log = File.read('debian/xikolo-account.debhelper.log') if File.exists?  'debian/xikolo-account.debhelper.log'
-        exec 'dh_prep'
       end
 
       def create(creator)
