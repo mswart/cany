@@ -97,4 +97,70 @@ describe Cany::Specification do
       expect { spec.setup { require_cany '~> 0.1' } }.to raise_exception Cany::UnsupportedVersion, /.*require.*"~> 0\.1" but .* "1.0"/
     end
   end
+
+  context '#build_dependencies' do
+    let(:spec) { described_class.new {} }
+    subject { spec.build_dependencies }
+    let(:build_dep1) { Cany::Dependency.new situations: :build }
+    let(:runtime_dep1) { Cany::Dependency.new situations: :runtime }
+    let(:both_dep1) { Cany::Dependency.new situations: [:build, :runtime] }
+
+    it { should eq [] }
+
+    context 'with added build dependencies' do
+      before { spec.dependencies << build_dep1 }
+
+      it 'should include these deps' do
+        should match_array [build_dep1]
+      end
+    end
+
+    context 'with added runtime dependencies' do
+      before { spec.dependencies << runtime_dep1 }
+      it 'should not include' do
+        should match_array []
+      end
+    end
+
+    context 'with added build + runtime dependencies' do
+      before { spec.dependencies << both_dep1 }
+
+      it 'should include this dep' do
+        should match_array [both_dep1]
+      end
+    end
+  end
+
+  context '#runtime_dependencies' do
+    let(:spec) { described_class.new {} }
+    subject { spec.runtime_dependencies }
+    let(:build_dep1) { Cany::Dependency.new situations: :build }
+    let(:runtime_dep1) { Cany::Dependency.new situations: :runtime }
+    let(:both_dep1) { Cany::Dependency.new situations: [:build, :runtime] }
+
+    it { should eq [] }
+
+    context 'with added build dependencies' do
+      before { spec.dependencies << build_dep1 }
+
+      it 'should not include' do
+        should match_array []
+      end
+    end
+
+    context 'with added runtime dependencies' do
+      before { spec.dependencies << runtime_dep1 }
+      it 'should include these deps' do
+        should match_array [runtime_dep1]
+      end
+    end
+
+    context 'with added build + runtime dependencies' do
+      before { spec.dependencies << both_dep1 }
+
+      it 'should include this dep' do
+        should match_array [both_dep1]
+      end
+    end
+  end
 end

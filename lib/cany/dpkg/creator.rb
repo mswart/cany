@@ -75,7 +75,6 @@ module Cany
       end
 
       def create_source_control
-        src_deps, bin_deps = build_dependencies
         File.open debian('control'), 'w' do |f|
           # write source package fields:
           f.write("Source: #{spec.name}\n")
@@ -84,13 +83,13 @@ module Cany
           f.write("Maintainer: #{spec.maintainer_name} <#{spec.maintainer_email}>\n")
           f.write("Standards-Version: 3.9.2\n")
           f.write("Homepage: #{spec.website}\n")
-          f.write("Build-Depends: #{src_deps.join(', ')}\n")
+          f.write("Build-Depends: #{resolve_dependencies(@spec.build_dependencies)}\n")
 
           # write binary package fields:
           f.write("\n")
           f.write("Package: #{spec.name}\n")
           f.write("Architecture: any\n")
-          f.write("Depends: #{bin_deps.join(', ')}\n")
+          f.write("Depends: #{resolve_dependencies(@spec.runtime_dependencies)}\n")
           f.write("Description: #{spec.description}\n")
         end
       end
@@ -141,21 +140,16 @@ EOM
 
       private
 
-      def build_dependencies
-        [
-          calculcate_dependencies(@spec.dependencies.select(&:build?)),
-          calculcate_dependencies(@spec.dependencies.select(&:runtime?))
-        ]
-      end
-
-      def calculcate_dependencies(dependencies)
-        deps = []
-        dependencies.each do |dep|
-          deps += dep.determine(:ubuntu, :precise).map do |pkg, version|
+      # Converts the given array of dependencies objects into a dependency string used inside
+      # debians source control files
+      # @param dependencies[Array<Dependency>]
+      # @return [String] A dependency string
+      def resolve_dependencies(dependencies)
+        dependencies.inject([]) do |deps, dep|
+          deps + dep.determine(:ubuntu, :precise).map do |pkg, version|
             !version.nil? ? "#{pkg} (#{version})" : pkg
           end
-        end
-        deps
+        end.join(', ')
       end
     end
   end

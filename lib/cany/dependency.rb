@@ -13,11 +13,12 @@ module Cany
   #     possible to build or run the application.
   # Other priorities are planed but currently not implemented.
   class Dependency
-    def initialize
+    def initialize(opts={})
+      opts = { situations: [:runtime] }.merge opts
       @default = []
       @distros = Cany.hash_with_array_as_default
       @distro_releases ||= Cany.hash_with_array_as_default
-      @situations = [:runtime]
+      self.situations = opts[:situations]
     end
 
     attr_reader :situations

@@ -18,5 +18,19 @@ module Cany
     def setup(dsl=Cany::Specification::DSL, &block)
       dsl.new(self).exec(&block)
     end
+
+    # @api public
+    # Return all dependencies needed to build this package
+    # @return [Array<Dependency>] A list of dependencies.
+    def build_dependencies
+      dependencies.select(&:build?)
+    end
+
+    # @api public
+    # Return all dependencies needed to build this package
+    # @return [Array<Dependency>] A list of dependencies.
+    def runtime_dependencies
+      dependencies.select(&:runtime?)
+    end
   end
 end
