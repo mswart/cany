@@ -51,11 +51,11 @@ module Cany
 
   require 'cany/version'
   require 'cany/errors'
-  require 'cany/dependency'
-  require 'cany/specification'
   module Mixins
     require 'cany/mixins/depend_mixin'
   end
+  require 'cany/dependency'
+  require 'cany/specification'
   require 'cany/recipe'
   require 'cany/recipes/bundler'
   require 'cany/recipes/bundler/gem'

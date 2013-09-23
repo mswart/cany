@@ -45,6 +45,15 @@ module Cany
       def binary(&block)
         @specification.binary = block
       end
+
+      # @api public
+      # Adds a new dependency for the software. See Cany::Dependency for a more
+      # abstract description about dependencies
+      # See Cany::Mixins::DependMixin for parameter description
+      include Mixins::DependMixin
+      def depend(*args)
+        @specification.dependencies << create_dep(*args)
+      end
     end
   end
 end
