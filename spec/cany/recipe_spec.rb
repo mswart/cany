@@ -173,4 +173,20 @@ describe Cany::Recipe do
       end
     end
   end
+
+  context '#name' do
+    context 'on an unregistered recipe' do
+      subject { recipe.name }
+      it 'should raise a NoMethodError' do
+        expect { subject }.to raise_exception NoMethodError
+      end
+    end
+
+    context 'on a registered recipe' do
+      subject { test_recipe.name }
+      it 'should return its registered name' do
+        should eq :test_recipe
+      end
+    end
+  end
 end

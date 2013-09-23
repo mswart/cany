@@ -11,6 +11,11 @@ module Cany
     def self.register_as(name)
       @@recipes ||= {}
       @@recipes[name] = self
+      module_eval(<<-EOS, __FILE__, __LINE__)
+        def name
+          :#{name}
+        end
+        EOS
     end
 
     # @api public
