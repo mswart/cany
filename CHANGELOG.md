@@ -1,4 +1,12 @@
-0.1.0 / 2013-09-23
+0.1.1 / 2013-09-24
+==================
+
+Bug Fixes:
+
+  * DPKG: create compat 8 level files - no multiarch problems
+
+
+0.1.0 / 2013-09-24
 ==================
 
 Features:
