@@ -70,7 +70,7 @@ module Cany
 
       def create_compact
         File.open debian('compat'), 'w' do |f|
-          f.write '9'
+          f.write '8'
         end
       end
 
