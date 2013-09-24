@@ -81,6 +81,7 @@ module Cany
     require 'cany/recipes/rails'
     require 'cany/recipes/web_server'
     require 'cany/recipes/thin'
+    require 'cany/recipes/sidekiq'
   end
 
 

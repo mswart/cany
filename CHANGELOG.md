@@ -10,6 +10,7 @@ Features:
   + canspec: new require_cany directive
   + Support per rails configuration
   + Refactored init script management (supports multiple services per package)
+  + sidekiq recipe
 
 Bug fixes:
 
