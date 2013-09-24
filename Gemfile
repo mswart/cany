@@ -12,6 +12,7 @@ group :development do
   gem 'rb-fchange', :require => false
   gem 'guard-rspec'
   gem 'guard-yard'
+  gem 'redcarpet', platform: :ruby
 end
 
 group :test do
