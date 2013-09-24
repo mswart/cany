@@ -77,7 +77,7 @@ module Cany
     alias :exec_ :exec
 
     # @api public
-    # Run a ruby task (like gem, bundler, rake ...)
+    # Run a ruby task (like gem, bundle, rake ...)
     #
     # The method expects as arguments the program name and additional parameters for the program.
     # See exec for more examples
@@ -189,6 +189,7 @@ module Cany
     # specification
     # @param name[Symbol] recipe name
     def recipe(name)
+      return spec.system_recipe if name == :system
       recipe_class = Recipe.from_name(name)
       @spec.recipes.each do |one_recipe|
         return one_recipe if one_recipe.instance_of? recipe_class
@@ -208,7 +209,7 @@ module Cany
     # default implementation:
     #########################
 
-    # @!group Recipe Steps - to be oweriden in subclass
+    # @!group Recipe Steps - to be overridden in subclass
 
     # @api public
     # Prepares the recipes to run things. This is call exactly once for all recipes before

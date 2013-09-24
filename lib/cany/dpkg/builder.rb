@@ -15,21 +15,10 @@ module Cany
       # @api public
       # @param [String] build_step_name The name of the dpkg build step (clean, build, binary)
       def run(build_step_name)
-        setup_recipes
-        @recipes.first.exec 'dh_prep' if build_step_name.to_s == 'binary'
-        @recipes.first.send build_step_name.to_s
-      end
-
-      # @api private
-      # This method creates recipe instances for all required recipes from the given spec.
-      def setup_recipes
-        @recipes = []
-        @recipes << DebHelperRecipe.new(spec)
-        spec.recipes.reverse.each do |recipe|
-          recipe.inner = @recipes.first
-          @recipes.unshift recipe
-        end
-        @recipes.map(&:prepare)
+        spec.system_recipe = DebHelperRecipe.new spec
+        spec.setup_recipes
+        spec.system_recipe.exec 'dh_prep' if build_step_name.to_s == 'binary'
+        spec.recipes.first.send build_step_name.to_s
       end
     end
   end

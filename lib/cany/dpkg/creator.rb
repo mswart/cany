@@ -49,7 +49,7 @@ module Cany
         parse_opts *args
 
         # let recipes influence package creating
-        @spec.recipes << DebHelperRecipe.new(spec)
+        @spec.system_recipe = DebHelperRecipe.new(spec)
         @spec.recipes.each do |recipe|
           recipe.create(self)
         end

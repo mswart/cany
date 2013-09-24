@@ -20,6 +20,11 @@ describe Cany::Dpkg::Creator do
     end
     let(:run) { Cany::Dpkg::Creator.new(spec).run *(@run_args || []) }
 
+    it 'should set the system recipe' do
+      expect(spec).to receive(:system_recipe=).with(kind_of(Cany::Dpkg::DebHelperRecipe)).and_call_original
+      run
+    end
+
     context 'debian directory' do
       subject { File.join dir, 'debian' }
 

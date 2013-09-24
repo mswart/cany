@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe Cany::Specification do
+  let(:spec) { described_class.new {} }
   describe '#new' do
     it 'should have a name' do
       spec = Cany::Specification.new do
@@ -99,7 +100,6 @@ describe Cany::Specification do
   end
 
   context '#build_dependencies' do
-    let(:spec) { described_class.new {} }
     subject { spec.build_dependencies }
     let(:build_dep1) { Cany::Dependency.new situations: :build }
     let(:runtime_dep1) { Cany::Dependency.new situations: :runtime }
@@ -132,7 +132,6 @@ describe Cany::Specification do
   end
 
   context '#runtime_dependencies' do
-    let(:spec) { described_class.new {} }
     subject { spec.runtime_dependencies }
     let(:build_dep1) { Cany::Dependency.new situations: :build }
     let(:runtime_dep1) { Cany::Dependency.new situations: :runtime }
@@ -160,6 +159,32 @@ describe Cany::Specification do
 
       it 'should include this dep' do
         should match_array [both_dep1]
+      end
+    end
+  end
+
+  describe '#setup_recipes' do
+    subject { spec.setup_recipes }
+
+    context 'with loaded recipes' do
+      before do
+        spec.setup do
+          use :bundler
+          use :rails
+        end
+        spec.system_recipe = Cany::Dpkg::DebHelperRecipe.new spec
+      end
+      it 'should instance any used recipes' do
+        expect_any_instance_of(Cany::Recipes::Rails).to receive(:inner=).with(kind_of(Cany::Dpkg::DebHelperRecipe)).and_call_original
+        expect_any_instance_of(Cany::Recipes::Bundler).to receive(:inner=).with(kind_of(Cany::Recipes::Rails))
+        subject
+      end
+
+      it 'should call prepare on all recipes' do
+        expect_any_instance_of(Cany::Dpkg::DebHelperRecipe).to receive(:prepare).and_call_original
+        expect_any_instance_of(Cany::Recipes::Bundler).to receive(:prepare).and_call_original
+        expect_any_instance_of(Cany::Recipes::Rails).to receive(:prepare).and_call_original
+        subject
       end
     end
   end

@@ -45,6 +45,12 @@ module Cany
     end
   end
 
+  class NoSystemRecipe < Error
+    def initialize
+      super "The specification has no loaded system recipe."
+    end
+  end
+
   # This exception is raised if the running Cany version satisfies not the
   # required Cany version constraint from the canspec.
   class UnsupportedVersion < Error
