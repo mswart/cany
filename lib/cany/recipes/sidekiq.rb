@@ -5,7 +5,7 @@ module Cany::Recipes
   # @see http://sidekiq.org/ The official website for more information.
   # @node The recipe relies that 'sidekiq' is listed inside your Gemfile and
   #   therefore installed via the 'bundler' recipe.
-  class Sidekiq < Recipe
+  class Sidekiq < Cany::Recipe
     register_as :sidekiq
 
     attr_accessor :queues
@@ -15,7 +15,7 @@ module Cany::Recipes
       super
     end
 
-    class DSL < Recipe::DSL
+    class DSL < Cany::Recipe::DSL
       def queue(name)
         @recipe.queues << name
       end
