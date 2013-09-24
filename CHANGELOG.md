@@ -3,6 +3,7 @@
 
 Buf Fixes:
   
+  * dpkg: fix build error with --no-arch-all
   * recipe: fix web server pre start scripts
 
 

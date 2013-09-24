@@ -18,7 +18,7 @@ module Cany
         spec.system_recipe = DebHelperRecipe.new spec
         spec.setup_recipes
         spec.system_recipe.exec 'dh_prep' if build_step_name.to_s == 'binary'
-        spec.recipes.first.send build_step_name.to_s
+        spec.recipes.first.send build_step_name.gsub('binary-arch', 'binary').to_s
       end
     end
   end
