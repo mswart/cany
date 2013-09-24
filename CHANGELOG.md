@@ -11,6 +11,7 @@ Features:
   + Support per rails configuration
   + Refactored init script management (supports multiple services per package)
   + sidekiq recipe
+  + unicorn recipe
 
 Bug fixes:
 
