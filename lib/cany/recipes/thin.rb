@@ -8,7 +8,7 @@ module Cany
       register_as :thin
 
       def launch_command
-        "thin start -C /etc/#{spec.name}/thin.yml"
+        %W(thin start -C /etc/#{spec.name}/thin.yml")
       end
 
       def binary

@@ -189,4 +189,25 @@ describe Cany::Recipe do
       end
     end
   end
+
+  context '#install_service' do
+    let(:name) { :test }
+    let(:command) { :command }
+    let(:opts) { {} }
+    subject { recipe.install_service name, command, opts }
+
+    context 'on recipe without loaded system recipe' do
+      it 'should raise an exception' do
+        expect { subject }.to raise_exception Cany::NoSystemRecipe
+      end
+    end
+
+    context 'with loaded deb helper recipe' do
+      before { spec.system_recipe = Cany::Dpkg::DebHelperRecipe.new spec }
+      it 'should pass call to system recipe' do
+        expect_any_instance_of(Cany::Dpkg::DebHelperRecipe).to receive(:install_service).with(name, command, opts)
+        subject
+      end
+    end
+  end
 end

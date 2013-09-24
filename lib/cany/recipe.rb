@@ -121,6 +121,21 @@ module Cany
     end
 
     # @api public
+    # Specify a command call (program + args) that should be installed as service and started
+    # automatically.
+    # This method should be only call inside the binary step.
+    # @param name[Symbol] A short identifier. Used to separate different services. E.g. the name
+    #   of the web server that is launched by this command (like puma, unicorn, thin)
+    # @param command[Array<String>] The command that should be started and its parameter. The first
+    #   element is the command name - can be absolute or relative path name (than searched in path)
+    # @param opts[Hash] Service behavior options
+    # @option opts[String] :user As which user should the command executed (default is root)
+    # @option opts[String] :group As which group should the command executed (default is root)
+    def install_service(*args)
+      recipe(:system).install_service(*args)
+    end
+
+    # @api public
     # Ensure that the given files or directories are no present. Directories are removed
     # recursively.
     def rmtree(*args)
