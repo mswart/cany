@@ -51,20 +51,46 @@ module Cany
 
   require 'cany/version'
   require 'cany/errors'
+  # This module contains ruby mixins that are used within multiple classes to share code.
   module Mixins
     require 'cany/mixins/depend_mixin'
   end
   require 'cany/dependency'
   require 'cany/specification'
   require 'cany/recipe'
-  require 'cany/recipes/bundler'
-  require 'cany/recipes/bundler/gem'
-  require 'cany/recipes/bundler/gem_db'
-  require 'cany/recipes/rails'
-  require 'cany/recipes/web_server'
-  require 'cany/recipes/thin'
-  require 'cany/dpkg'
-  require 'cany/dpkg/creator'
-  require 'cany/dpkg/builder'
-  require 'cany/dpkg/deb_helper_recipe'
+
+
+  # Applications using common libraries to concentrate on things that are new
+  # and no solved by existing software. Therefore there are similar deploy
+  # tasks that are needed for applications.
+  #
+  # Cany groups common deploy aspects in recipes. This recipes can be included
+  # and used by the application. Normally there exists one recipe for every
+  # important software that is used by the application and influences directly
+  # the way the applications needs to be installed.
+  #
+  # Central recipes are bundler as gem package manager and rails as popular
+  # web framework.
+  #
+  # To support starting the applications there is also a collection of recipes
+  # deploying ruby web server or background services.
+  module Recipes
+    require 'cany/recipes/bundler'
+    require 'cany/recipes/bundler/gem'
+    require 'cany/recipes/bundler/gem_db'
+    require 'cany/recipes/rails'
+    require 'cany/recipes/web_server'
+    require 'cany/recipes/thin'
+  end
+
+
+  # Cany is designed to be able to pack applications for multiple package
+  # managers. Although there is currently only support for debian/ubuntu.
+  # All DPKG specific things are group into the Dpkg namespace.
+  module Dpkg
+    require 'cany/dpkg'
+    require 'cany/dpkg/creator'
+    require 'cany/dpkg/builder'
+    require 'cany/dpkg/deb_helper_recipe'
+  end
 end
