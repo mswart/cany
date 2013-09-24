@@ -65,9 +65,8 @@ module Cany::Dpkg
           setgid <%= group %>
           <% end %>
 
-          exec <%= command %>
+          exec <%= command.join(' ') %>
         EOF
-        Cany.logger.warn name
         exec %w{dh_installinit --name}, "#{spec.name}-#{name}"
       end
     end

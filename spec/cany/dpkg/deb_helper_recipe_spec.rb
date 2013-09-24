@@ -35,7 +35,7 @@ describe Cany::Dpkg::DebHelperRecipe do
 
   describe '#install_services' do
     before do
-      recipe.install_service :service, 'hans', user: 'www-data', group: 'www-data'
+      recipe.install_service :service, %w(hans args1), user: 'www-data', group: 'www-data'
       recipe.install_services
     end
     subject { File.read File.join(dir, 'debian', 'test.test-service.upstart') }
@@ -56,7 +56,7 @@ chdir /usr/share/test
 setuid www-data
 setgid www-data
 
-exec hans
+exec hans args1
 EOF
       expect(@executed_programs).to match_array [['dh_installinit', '--name', 'test-service']]
     end
