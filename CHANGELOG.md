@@ -1,3 +1,11 @@
+0.1.2 / 2013-09-24
+==================
+
+Buf Fixes:
+  
+  * recipe: fix web server pre start scripts
+
+
 0.1.1 / 2013-09-24
 ==================
 
