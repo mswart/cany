@@ -1,3 +1,11 @@
+0.2.0 / 2013-09-xx
+==================
+
+Feature:
+
+  * sidekiq: option to specify as which user and group sidekiq should run
+
+
 0.1.3 / 2013-09-25
 ==================
 
@@ -10,7 +18,7 @@ Bug Fixes:
 ==================
 
 Bug Fixes:
-  
+
   * dpkg: fix build error with --no-arch-all
   * recipe: fix web server pre start scripts
 

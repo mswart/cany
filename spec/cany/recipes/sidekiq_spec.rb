@@ -28,6 +28,7 @@ describe Cany::Recipes::Sidekiq do
       end
     end
   end
+
   context 'with queue names' do
     before do
       spec.setup do
@@ -44,6 +45,28 @@ describe Cany::Recipes::Sidekiq do
         %w(/usr/bin/test sidekiq --environment production --queue name1,name2),
         user: 'www-data', group: 'www-data'
       )
+      recipe.inner = double('recipe')
+      expect(recipe.inner).to receive(:binary)
+      recipe.binary
+    end
+  end
+
+  context 'with defined user/group' do
+    before do
+      spec.setup do
+        use :sidekiq do
+          user 'user'
+          group 'group'
+        end
+      end
+    end
+
+    it 'should launch sidekiq with as this user and group' do
+      expect(recipe).to receive(:install_service).with(
+                            :sidekiq,
+                            %w(/usr/bin/test sidekiq --environment production),
+                            user: 'user', group: 'group'
+                        )
       recipe.inner = double('recipe')
       expect(recipe.inner).to receive(:binary)
       recipe.binary
