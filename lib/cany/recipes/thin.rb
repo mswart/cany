@@ -15,7 +15,7 @@ module Cany::Recipes
     register_as :thin
 
     def launch_command
-      %W(thin start -C /etc/#{spec.name}/thin.yml")
+      %W(thin start --config /etc/#{spec.name}/thin.yml)
     end
 
     def binary

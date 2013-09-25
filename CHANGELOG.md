@@ -4,6 +4,7 @@
 Feature:
 
   * sidekiq: option to specify as which user and group sidekiq should run
+  * web server: option to specify as which user and group the web server should run (thin, unicorn)
 
 
 0.1.3 / 2013-09-25
