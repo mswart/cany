@@ -1,7 +1,15 @@
+0.1.3 / 2013-09-25
+==================
+
+Bug Fixes:
+
+  * unicorn: fix launch command
+
+
 0.1.2 / 2013-09-24
 ==================
 
-Buf Fixes:
+Bug Fixes:
   
   * dpkg: fix build error with --no-arch-all
   * recipe: fix web server pre start scripts

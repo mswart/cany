@@ -10,7 +10,7 @@ module Cany::Recipes
     register_as :unicorn
 
     def launch_command
-      %W(unicorn start -c /etc/#{spec.name}/unicorn.rb -E production)
+      %W(unicorn --config-file /etc/#{spec.name}/unicorn.rb --env production)
     end
   end
 end
