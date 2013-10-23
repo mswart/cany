@@ -5,7 +5,7 @@ class Cany::Recipes::Bundler
   end
 
   Gem.specify :ethon do
-    depend 'libcurl3-gnutls', situation: [:build, :runtime]
+    depend 'libcurl3', situation: [:build, :runtime]
   end
 
   Gem.specify :mysql2 do
