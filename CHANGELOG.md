@@ -1,3 +1,11 @@
+0.3.0 / 2013-10-23
+==================
+
+Feature:
+
+  * rails: Option to specify rails env for assets precompiling
+
+
 0.2.1 / 2013-10-23
 ==================
 

@@ -5,13 +5,14 @@ module Cany
       hook :env
 
       class DSL < Recipe::DSL
-        delegate :compile_assets
+        delegate :compile_assets, :assets_env
       end
 
-      attr_accessor :compile_assets
+      attr_accessor :compile_assets, :assets_env
 
       def initialize(*args)
         @compile_assets = true
+        @assets_env = 'production'
         super
       end
 
@@ -26,8 +27,11 @@ module Cany
 
       def build
         run_hook :env, :before
+        if compile_assets
+          ENV['RAILS_ENV'] = assets_env
+          ruby_bin 'bundle', 'exec', 'rake', 'assets:precompile'
+        end
         ENV['RAILS_ENV'] = 'production'
-        ruby_bin 'bundle', 'exec', 'rake', 'assets:precompile' if compile_assets
         inner.build
       end
 
