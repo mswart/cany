@@ -5,6 +5,10 @@ Feature:
 
   * bundler: Option to ignore additional Gemfile groups
 
+Bug Fixes:
+
+  * bundler: Fix gem install bundler with ruby 2.0 (work around)
+
 
 0.3.0 / 2013-10-23
 ==================
