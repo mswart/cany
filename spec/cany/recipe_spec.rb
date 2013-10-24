@@ -87,17 +87,38 @@ describe Cany::Recipe do
 
       context 'should be configurable' do
         before do
-          test_recipe.configure :test_conf, env: 'production'
+          test_recipe.configure option_name, env: 'production'
         end
         it { expect(subject).to eq(env: 'production') }
       end
 
       context 'options should be merged between multiple calls' do
         before do
-          test_recipe.configure :test_conf, env: 'production'
-          test_recipe.configure :test_conf, env2: 'hans'
+          test_recipe.configure option_name, env: 'production'
+          test_recipe.configure option_name, env2: 'hans'
         end
         it { expect(subject).to eq(env: 'production', env2: 'hans') }
+      end
+    end
+
+    context 'with a defined config with a default' do
+      let(:option_name) { :text_conf_with_default }
+      it 'should be initialized with this default' do
+        expect(subject).to eq(hans: :otto)
+      end
+
+      context 'should be configurable' do
+        before do
+          test_recipe.configure option_name, env: 'production'
+        end
+        it { expect(subject).to eq(hans: :otto, env: 'production') }
+      end
+
+      context 'options should be merged between multiple calls' do
+        before do
+          test_recipe.configure option_name, hans: :meyer
+        end
+        it { expect(subject).to eq(hans: :meyer) }
       end
     end
   end

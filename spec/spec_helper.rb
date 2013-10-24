@@ -25,6 +25,7 @@ class TestRecipe < Cany::Recipe
   register_as :test_recipe
   hook :test_hook
   option :test_conf
+  option :text_conf_with_default, hans: :otto
 end
 
 Cany.logger.level = Logger::FATAL

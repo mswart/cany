@@ -36,8 +36,8 @@ module Cany
       @hooks = Hash[(self.class.defined_hooks || []).map do |name|
         [name, Cany.hash_with_array_as_default]
       end]
-      @options = Hash[(self.class.defined_options || []).map do |name|
-        [name, Cany.hash_with_array_as_default]
+      @options = Hash[(self.class.defined_options || {}).map do |name, default|
+        [name, default.dup]
       end]
       self.class.const_get(:DSL).new(self).exec(&configure_block) if configure_block
     end
@@ -160,9 +160,9 @@ module Cany
       # recipes not for the user. See Recipe::DSL for this.
       # @param name[Symbol] The name of the option. The option name is scoped
       #    inside a recipe.
-      def option(name)
-        @defined_options ||= []
-        @defined_options  << name
+      def option(name, default={})
+        @defined_options ||= {}
+        @defined_options[name] = default
       end
     end
 
