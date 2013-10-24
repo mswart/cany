@@ -2,16 +2,18 @@ module Cany
   module Recipes
     class Bundler < Cany::Recipe
       register_as :bundler
-      option :env_vars
+      option :env_vars, GEM_PATH: 'bundler'
+      option :skip_groups, development: true, test: true
+
+      class DSL < Recipe::DSL
+        def skip_group(name, skip=true)
+          @recipe.configure :skip_groups, name => skip
+        end
+      end
 
       def clean
         rmtree 'bundler'
-        # rmtree 'vendor/bundle' -- do not remove gems, increase testing time
         inner.clean
-      end
-
-      def prepare
-        configure :env_vars, GEM_PATH: 'bundler'
       end
 
       def create(creator)
@@ -31,7 +33,7 @@ module Cany
         ENV['GEM_PATH'] = 'bundler'
         ENV['PATH'] = 'bundler/bin:' + ENV['PATH']
         ruby_bin 'gem', %w(install bundler --no-ri --no-rdoc --install-dir bundler --bindir bundler/bin)
-        ruby_bin 'bundle', %w(install --deployment --without development test)
+        ruby_bin 'bundle', %w(install --deployment --without), skipped_groups
         inner.build
       end
 
@@ -50,6 +52,14 @@ module Cany
         end
         content += [ "exec /usr/share/#{spec.name}/bundler/bin/bundle exec \"$@\"", '' ]
         content.join "\n"
+      end
+
+      def skipped_groups
+        option(:skip_groups).select do |option, skipped|
+          skipped
+        end.map do |name, _|
+          name.to_s
+        end
       end
     end
   end

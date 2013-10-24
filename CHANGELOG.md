@@ -1,3 +1,11 @@
+0.4.0 / 2013-10-24
+==================
+
+Feature:
+
+  * bundler: Option to ignore additional Gemfile groups
+
+
 0.3.0 / 2013-10-23
 ==================
 
