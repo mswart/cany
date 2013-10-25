@@ -7,7 +7,7 @@ module Cany
 
     attr_accessor :name, :description, :maintainer_name, :maintainer_email, :website, :licence, :version
     attr_accessor :base_dir, :recipes, :dependencies, :cany_version_constraint
-    attr_accessor :build, :binary
+    attr_accessor :prepare, :clean, :build, :binary
 
     def initialize(dsl=Cany::Specification::DSL, &block)
       @recipes = []

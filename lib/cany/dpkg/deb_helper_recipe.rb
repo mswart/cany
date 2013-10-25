@@ -21,7 +21,12 @@ module Cany::Dpkg
       depend creator.ruby_deb + '-dev', situation: :build
     end
 
+    def prepare
+      instance_eval &spec.prepare if spec.prepare
+    end
+
     def clean
+      instance_eval &spec.clean if spec.clean
       exec %w(dh clean)
     end
 

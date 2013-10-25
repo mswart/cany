@@ -1,3 +1,11 @@
+0.5.0 / 2013-10-25
+==================
+
+Feature:
+
+  * Support custom prepare and clean actions in specification
+
+
 0.4.0 / 2013-10-24
 ==================
 

@@ -38,6 +38,14 @@ module Cany
         @specification.recipes << Cany::Recipe.from_name(name).new(@specification, &block)
       end
 
+      def prepare(&block)
+        @specification.prepare = block
+      end
+
+      def clean(&block)
+        @specification.clean = block
+      end
+
       def build(&block)
         @specification.build = block
       end
