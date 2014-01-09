@@ -4,6 +4,7 @@ module Cany
       register_as :bundler
       option :env_vars, GEM_PATH: 'bundler'
       option :skip_groups, development: true, test: true
+      option :clean_gems, nil => :whitelist
 
       class DSL < Recipe::DSL
         def skip_group(name, skip=true)
@@ -38,6 +39,7 @@ module Cany
         ruby_bin 'gem', %w(install bundler --no-ri --no-rdoc --install-dir bundler --bindir bundler/bin)
         ENV['HOME'] = old_home
         ruby_bin 'bundle', %w(install --deployment --without), skipped_groups
+        clear_gem_dirs
         inner.build
       end
 
@@ -63,6 +65,38 @@ module Cany
           skipped
         end.map do |name, _|
           name.to_s
+        end
+      end
+
+      def clear_gem_dirs
+        Dir.glob('vendor/bundle/ruby/*/specifications/*').each do |gemspec_file|
+          gemspec = ::Gem::Specification.load gemspec_file
+          kind = option(:clean_gems)[gemspec.name] || option(:clean_gems)[nil]
+          case kind
+          when :whitelist
+            clear_gem_dir gemspec
+          when false
+            # do nothing
+          else
+            raise RuntimeError.new "Unknown clean kind #{kind}"
+          end
+        end
+      end
+
+      def clear_gem_dir(gemspec)
+        puts "  clearing #{gemspec.name} ..."
+        Dir.new(gemspec.gem_dir).each do |entry|
+          next if %w{. ..}.include? entry
+          if gemspec.bin_dir.include? entry
+            puts "    keep bin dir #{gemspec.gem_dir}/#{entry}"
+          elsif gemspec.require_paths.include? entry
+            puts "    keep require dir #{gemspec.gem_dir}/#{entry}"
+          elsif %w{data vendor app}.include? entry # some generic exceptions
+            puts "    keep #{gem_spec.gem_dir}/#{entry} as exception"
+          else
+            puts "    removing unused dir/file: #{gemspec.gem_dir}/#{entry} ..."
+            FileUtils.rm_rf File.join(gemspec.gem_dir, entry)
+          end
         end
       end
     end
