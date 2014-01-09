@@ -1,3 +1,11 @@
+0.5.1 / 2014-01-09
+==================
+
+Bug Fixes:
+
+  * Specify native dependencies for rmagick
+
+
 0.5.0 / 2013-10-25
 ==================
 

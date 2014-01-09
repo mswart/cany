@@ -24,4 +24,9 @@ class Cany::Recipes::Bundler
     depend 'libpq-dev', situation: :build
     depend 'libpq5', situation: :runtime
   end
+
+  Gem.specify :rmagick do
+    depend 'libmagickcore-dev', situation: :build
+    depend 'libmagickwand-dev', situation: :build
+  end
 end
