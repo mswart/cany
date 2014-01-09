@@ -26,7 +26,7 @@ module Cany
       # @param version [String] The version constrain the must be satisfied by Cany.
       # @raise Cany::UnsupportedVersion on version mismatch
       def require_cany(version)
-        unless Gem::Requirement.create(version).satisfied_by? Gem::Version.new(Cany::VERSION)
+        unless Gem::Requirement.create(version).satisfied_by? Gem::Version.new(Cany::VERSION.to_s)
           raise UnsupportedVersion.new version
         end
         @specification.cany_version_constraint = version
