@@ -2,7 +2,7 @@ module Cany
   module VERSION
     MAJOR = 0
     MINOR = 5
-    PATCH = 2
+    PATCH = 3
     STAGE = nil
     STRING = [MAJOR, MINOR, PATCH, STAGE].reject(&:nil?).join('.')
     def self.to_s; STRING end

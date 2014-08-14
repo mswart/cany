@@ -1,3 +1,11 @@
+0.5.3 / 2014-08-14
+==================
+
+Bug Fixes:
+
+  * Use bundler 1.6.x for now - as 1.7 has difficulties with basic auth protected sources (II)
+
+
 0.5.2 / 2014-08-14
 ==================
 
