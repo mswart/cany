@@ -35,7 +35,7 @@ module Cany
         ENV['GEM_HOME'] = File.absolute_path('debian/gems')
         old_home = ENV['HOME']
         ENV['HOME'] = File.absolute_path('debian')
-        ruby_bin 'gem', %w(install bundler --no-ri --no-rdoc --install-dir bundler --bindir bundler/bin)
+        ruby_bin 'gem', %w(install bundler --version '~> 1.6' --no-ri --no-rdoc --install-dir bundler --bindir bundler/bin)
         ENV['HOME'] = old_home
         ruby_bin 'bundle', %w(install --deployment --without), skipped_groups
         inner.build
