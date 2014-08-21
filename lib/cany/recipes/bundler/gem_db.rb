@@ -29,4 +29,8 @@ class Cany::Recipes::Bundler
     depend 'libmagickcore-dev', situation: :build
     depend 'libmagickwand-dev', situation: :build
   end
+
+  Gem.specify :libv8 do
+    depend 'python2.7', situation: :build
+  end
 end
