@@ -37,7 +37,7 @@ module Cany
 
       def binary
         run_hook :env, :after
-        %w(app config.ru db Gemfile Gemfile.lock lib public Rakefile vendor).each do |item|
+        %w(app bin config.ru db Gemfile Gemfile.lock lib public Rakefile vendor).each do |item|
           install item, "/usr/share/#{spec.name}" if File.exists? item
         end
 

@@ -4,6 +4,7 @@
 Bug Fixes:
 
   * bundler: call bundler install with --retry 3
+  * rails: install bin directory (needed for rails console)
 
 
 0.5.3 / 2014-08-14
