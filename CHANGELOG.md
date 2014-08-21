@@ -1,3 +1,11 @@
+0.5.3 / 2014-08-21
+==================
+
+Bug Fixes:
+
+  * bundler: call bundler install with --retry 3
+
+
 0.5.3 / 2014-08-14
 ==================
 

@@ -40,7 +40,7 @@ describe Cany::Recipes::Bundler do
         recipe.inner = double('recipe')
         expect(recipe.inner).to receive(:build)
       end
-      let(:bundler_args) { %(bundle install --deployment --without development test) }
+      let(:bundler_args) { %(bundle install --deployment --retry 3 --without development test) }
       it 'should ignore development and test' do
         @second = false
         expect(recipe).to receive(:ruby_bin) do |*args|
@@ -64,7 +64,7 @@ describe Cany::Recipes::Bundler do
         recipe.inner = double('recipe')
         expect(recipe.inner).to receive(:build)
       end
-      let(:bundler_args) { %w(bundle install --deployment --without development test integration) }
+      let(:bundler_args) { %w(bundle install --deployment --retry 3 --without development test integration) }
       it 'should ignore development, test and integration' do
         @second = false
         expect(recipe).to receive(:ruby_bin).twice do |*args|
@@ -89,7 +89,7 @@ describe Cany::Recipes::Bundler do
         recipe.inner = double('recipe')
         expect(recipe.inner).to receive(:build)
       end
-      let(:bundler_args) { %w(bundle install --deployment --without test) }
+      let(:bundler_args) { %w(bundle install --deployment --retry 3 --without test) }
       it 'should ignore only left over one' do
         @second = false
         expect(recipe).to receive(:ruby_bin).twice do |*args|
