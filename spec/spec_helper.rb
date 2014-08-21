@@ -55,7 +55,7 @@ RSpec.configure do |config|
 
   config.before(:each) do
     @executed_programs = []
-    allow_any_instance_of(Cany::Recipe).to receive(:exec) { |*args| @executed_programs << args.flatten }
+    allow_any_instance_of(Cany::Recipe).to receive(:exec) { |instance, *args| @executed_programs << args.flatten }
   end
 
   config.after(:each) do

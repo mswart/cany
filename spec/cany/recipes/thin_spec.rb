@@ -30,8 +30,8 @@ describe Cany::Recipes::Thin do
         expect(recipe).to receive(:install_content).with '/etc/test/thin.yml', <<CONFIG
 ---
 environment: production
-socket: /var/run/test/sock
-pid: /var/run/test/thin.pid
+socket: "/var/run/test/sock"
+pid: "/var/run/test/thin.pid"
 CONFIG
         subject
         expect(pre_scripts).to eq({
