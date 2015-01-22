@@ -33,4 +33,9 @@ class Cany::Recipes::Bundler
   Gem.specify :libv8 do
     depend 'python2.7', situation: :build
   end
+
+  Gem.specify :rugged do
+    depend 'cmake', situation: :build
+    depend 'pkg-config', situation: :build
+  end
 end

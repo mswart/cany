@@ -1,4 +1,4 @@
-0.5.3 / 2014-08-21
+0.5.4 / ??? 
 ==================
 
 Bug Fixes:
@@ -6,6 +6,7 @@ Bug Fixes:
   * bundler: call bundler install with --retry 3
   * rails: install bin directory (needed for rails console)
   * bundler: libv8 needs python2.7
+  * bundler: rugged needs cmake and pkg-config to build
 
 
 0.5.3 / 2014-08-14
