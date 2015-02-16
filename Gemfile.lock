@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    cany (0.5.3)
+    cany (0.5.4)
 
 GEM
   remote: https://rubygems.org/
