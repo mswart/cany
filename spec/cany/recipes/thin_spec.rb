@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'yaml'
 
 describe Cany::Recipes::Thin do
   let(:setup) { proc { use :thin } }
@@ -27,12 +28,12 @@ describe Cany::Recipes::Thin do
                               %w(/usr/bin/test thin start --config /etc/test/thin.yml),
                               user: 'www-data', group: 'www-data'
                           )
-        expect(recipe).to receive(:install_content).with '/etc/test/thin.yml', <<CONFIG
----
-environment: production
-socket: "/var/run/test/sock"
-pid: "/var/run/test/thin.pid"
-CONFIG
+        data = {
+          'environment' => 'production',
+          'socket' => "/var/run/test/sock",
+          'pid' => '/var/run/test/thin.pid'
+        }
+        expect(recipe).to receive(:install_content).with '/etc/test/thin.yml', YAML.dump(data)
         subject
         expect(pre_scripts).to eq({
                                       mkdir_run: 'mkdir -p /var/run/test',
