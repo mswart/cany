@@ -42,9 +42,9 @@ module Cany::Recipes
 
     def sidekiq_args
       args = %w(--environment production)
-      if queues.any?
+      queues.each do |queue|
         args << '--queue'
-        args << queues.join(',')
+        args << queue.to_s
       end
       args
     end

@@ -42,7 +42,7 @@ describe Cany::Recipes::Sidekiq do
     it 'should launch sidekiq with the list of queues' do
       expect(recipe).to receive(:install_service).with(
         :sidekiq,
-        %w(/usr/bin/test sidekiq --environment production --queue name1,name2),
+        %w(/usr/bin/test sidekiq --environment production --queue name1 --queue name2),
         user: 'www-data', group: 'www-data'
       )
       recipe.inner = double('recipe')
