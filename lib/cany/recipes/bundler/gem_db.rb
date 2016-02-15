@@ -18,6 +18,7 @@ class Cany::Recipes::Bundler
     depend 'libxml2', situation: :runtime
     depend 'libxslt1-dev', situation: :build
     depend 'libxslt1.1', situation: :runtime
+    depend 'libz-dev', situation: :build
   end
 
   Gem.specify :pg do
