@@ -1,3 +1,12 @@
+0.5.5 / 2016-02-15
+==================
+
+Bug Fixes:
+
+  * bundler: newer nokogiri versions require zlib
+  * sidekiq: fix command with multiple queue names
+
+
 0.5.4 / 2015-02-16
 ==================
 
