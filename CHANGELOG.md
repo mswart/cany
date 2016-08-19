@@ -1,3 +1,11 @@
+0.5.6 / 2016-08-19
+==================
+
+Bug Fixes:
+
+  * bundler: use current bundler revision, issues with 1.7 looks resolved
+
+
 0.5.5 / 2016-02-15
 ==================
 
