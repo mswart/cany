@@ -1,3 +1,11 @@
+0.5.7 / 2016-12-16
+==================
+
+Bug Fixes:
+
+  * dpkg: let main script only restart once a year (not daily), it might break long running services
+
+
 0.5.6 / 2016-08-19
 ==================
 
