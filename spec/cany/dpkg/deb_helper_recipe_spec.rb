@@ -84,7 +84,7 @@ pre-start script
   chown www-data /var/run/test
 end script
 
-exec sleep 1d
+exec sleep 365d
 EOF
     end
   end

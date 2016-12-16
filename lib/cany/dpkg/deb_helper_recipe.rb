@@ -93,7 +93,7 @@ module Cany::Dpkg
         <% end %>
         end script
 
-        exec sleep 1d
+        exec sleep 365d
       EOF
     end
 
